@@ -1,0 +1,8 @@
+[submodule "gwtbootstrap5"]
+	path = gwtbootstrap5
+	url = https://github.com/gwtbootstrap5/gwtbootstrap5.git
+	branch = master
+[submodule "gwtbootstrap5-extras"]
+	path = gwtbootstrap5-extras
+	url = https://github.com/gwtbootstrap5/gwtbootstrap5-extras.git
+	branch = master
