@@ -243,6 +243,7 @@
                     <execution>
                         <configuration>
                             <configLocation>checkstyle.xml</configLocation>
+                            <propertyExpansion>checkstyle.suppressions.file=${project.basedir}/checkstyle-suppressions.xml</propertyExpansion>
                             <violationSeverity>warning</violationSeverity>
                         </configuration>
                         <goals>
