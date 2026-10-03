@@ -248,6 +248,7 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - `Toast.isShown()` returns whether the toast is shown. It used to return the jQuery object.
 - `Modal.setHideOtherModals(true)` works again: opening the modal hides the other open modals. It used the Bootstrap 3 `.modal.in` selector, which never matched in Bootstrap 5.
 - `DateTimePicker`, `DatePicker` and `TimePicker` with the Tempus Dominus engine work. In 0.1.x they threw `b.display is undefined` when attached, and reading the value failed because `picked` is a getter. Each picker now gets its own localization, so an English picker created after a German one stays in English, and `setLocale(...)` after attach switches the language. English month names are in English rather than the browser's language.
+- With the Air Datepicker engine, `hide()` on a picker that is already hidden (for example after it closed itself on selection) no longer throws, `setMinDate` / `setMaxDate` pass real JS dates instead of relying on the browser parsing GWT's `Date.toString()`, and unset hour / minute steps keep Air Datepicker's default of 1 instead of 0.
 - The native `TempusDominus` type's `setLocale(String)`, which doesn't exist in Tempus Dominus 6, is replaced by `locale(String)`.
 - `RangeBase.isVisible()` no longer recurses forever when the slider isn't attached.
 - A `RangeSlider` with a formatter no longer throws a `NullPointerException`. bootstrap-slider also passes single numbers, for the separate min / max tooltips, and those become a `Range` with equal bounds.
