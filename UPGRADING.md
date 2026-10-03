@@ -16,6 +16,8 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `Label` / `LabelType`, or `Styles.LABEL` | [Label is replaced by Badge](#label-is-replaced-by-badge) |
 | `NavbarType` | [Navbar theme uses data-bs-theme](#navbar-theme-uses-data-bs-theme) |
 | `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
+| `ColumnPull` / `ColumnPush`, `Column.setPull` / `setPush` | [Column order replaces pull and push](#column-order-replaces-pull-and-push) |
+| `CheckBoxButton` / `RadioButton` with your own CSS or click handlers | [Check and radio buttons use btn-check](#check-and-radio-buttons-use-btn-check) |
 | CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
 | Bootbox `DialogOptions`, `AlertOptions`, `ConfirmOptions` or `PromptOptions` as a `JavaScriptObject` | [Bootbox](#bootbox) |
@@ -202,6 +204,39 @@ Combine it with a background utility class (`bg-dark`, `bg-body-tertiary`) as in
 | `ButtonGroup.setToggle`, `Styles.BTN_GROUP_TOGGLE` | `btn-group-toggle` and the buttons plugin were removed in Bootstrap 5 | Nothing: `CheckBoxButton` / `RadioButton` work in any `ButtonGroup` |
 | `AbstractButton.setDataLoadingText`, `Attributes.DATA_LOADING_TEXT` | The button loading state was Bootstrap 3 | Change the text and `setEnabled(false)` yourself, optionally with a `Spinner` |
 | `Caption`, `ThumbnailLink`, `Styles.CAPTION` | Thumbnails were removed in Bootstrap 4 | `Card`, or `Image` with `ImageType.THUMBNAIL` inside an `Anchor` |
+
+### Column order replaces pull and push
+
+Bootstrap 4 replaced the pull / push classes with flexbox order. `ColumnPull` and `ColumnPush` wrote `order-1` / `order-2` whatever the number you chose, so `XS_3` and `XS_8` did the same thing. They're removed, with `Column.setPull`, `addPull`, `setPush` and `addPush`. The new `ColumnOrder` has every `order-*` class of Bootstrap 5: `0` to `5`, `FIRST` and `LAST`, for `XS` to `XXL`.
+
+Before:
+
+```java
+column.setPush(ColumnPush.MD_6);
+```
+
+After:
+
+```java
+column.setOrder(ColumnOrder.MD_LAST);   // or MD_0 ... MD_5, MD_FIRST
+```
+
+In UiBinder: `<b:Column size="XS_6" order="XS_FIRST MD_LAST"/>`.
+
+### Check and radio buttons use btn-check
+
+`CheckBoxButton` and `RadioButton` relied on Bootstrap 3/4's jQuery buttons plugin to hide the input and mark the button `active`. In 0.1.x they showed a checkbox or radio inside the button and never looked pressed. They now follow Bootstrap 5's check buttons:
+
+- The input has `btn-check`, so Bootstrap hides it, and the button gets `active` (Bootstrap's pressed style) while the input is checked. For radios, the whole group (inputs with the same `name`) is kept in sync, including the button that gets unchecked.
+- `ValueChangeEvent` fires once per change, from the input's `change` event. It used to fire from click handlers, which saw the old value on the label's click.
+- `setValue(...)` and `setActive(...)` update the `active` class too.
+- The keyboard focus ring is drawn on the button while the hidden input has keyboard focus.
+
+The root element is still the `label.btn` with the input as its first child, so they keep working inside `ButtonGroup`. If you styled the visible input or relied on the order of click events, review that code.
+
+### Modal can be centered and scrollable
+
+New: `Modal.setCentered(true)` centers the dialog vertically (`modal-dialog-centered`), and `Modal.setScrollable(true)` scrolls the body instead of the page (`modal-dialog-scrollable`). Both work as UiBinder attributes: `<b:Modal centered="true" scrollable="true">`.
 
 ### Checkboxes and radios use form-check markup
 
