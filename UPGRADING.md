@@ -11,6 +11,8 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `GwtBootstrap5ClientBundle.gwtBootstrap5()`, `jQuery()` or `jQueryMigrate()` | [Client bundle resources removed](#client-bundle-resources-removed) |
 | `Affix` | [Affix uses sticky positioning](#affix-uses-sticky-positioning) |
 | `Styles.FORM_CONTROL_RANGE` / `FORM_CONTROL_FILE`, or `InputRange` / `InputFile` with custom CSS | [InputRange and InputFile use Bootstrap 5 classes](#inputrange-and-inputfile-use-bootstrap-5-classes) |
+| `NavbarPosition.STATIC_TOP`, `ProgressType`, `Progress.setType` / `setActive`, `TableType.INVERSE`, `THeadType`, `ColumnOffset.XS_0` / `XS_12`, `ButtonType.LINK_OUTLINE`, or the `Styles` / `Spy` / `Toggle` constants listed there | [Bootstrap 3/4 constants removed](#bootstrap-34-constants-removed) |
+| CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
 | Bootbox `DialogOptions`, `AlertOptions`, `ConfirmOptions` or `PromptOptions` as a `JavaScriptObject` | [Bootbox](#bootbox) |
 | `TempusDominusLocales` or `AirDatepickerLocales` | [Datetimepicker locales](#datetimepicker-locales) |
@@ -123,6 +125,37 @@ Bootstrap 5 removed the affix plugin, so `Affix` didn't work on 0.1.x: it called
 `Styles.FORM_CONTROL_RANGE` (`"form-control-range"`) is replaced by `Styles.FORM_RANGE` (`"form-range"`). If you styled `.form-control-range` yourself, target `.form-range` instead.
 
 `InputFile` also loses the Bootstrap 4 class `form-control-file`, which Bootstrap 5 doesn't style; it keeps `form-control`, which is all Bootstrap 5 needs. `Styles.FORM_CONTROL_FILE` is removed. If you styled `.form-control-file` yourself, target `.form-control[type=file]` instead.
+
+### Bootstrap 3/4 constants removed
+
+These constants wrote Bootstrap 3 or 4 classes that don't exist in Bootstrap 5, so they had no effect:
+
+| Removed | Use instead |
+| --- | --- |
+| `NavbarPosition.STATIC_TOP` | `NavbarPosition.STICKY_TOP` (`sticky-top`); `STICKY_BOTTOM` is new |
+| `ProgressType`, `Progress.setType(...)` | `ProgressBar.setStriped(true)` on each bar |
+| `Progress.setActive(...)` | `ProgressBar.setAnimated(true)` on each bar |
+| `TableType.INVERSE` | `TableType.DARK`; `CellTable.setInverse` / `DataGrid.setInverse` now add `table-dark` |
+| `THeadType` | `table-light` / `table-dark` on the header row, with `addStyleName` |
+| `ColumnOffset.XS_0`, `ColumnOffset.XS_12` | Nothing: Bootstrap 5 has no `offset-0` or `offset-12` |
+| `ButtonType.LINK_OUTLINE` | `ButtonType.LINK` |
+| `Styles.IN`, `HIDE`, `WIDTH`, `RADIO`, `CAROUSEL_CONTROL` | `Styles.SHOW` for `in`; `d-none` for `hide`; `Styles.COLLAPSE_HORIZONTAL` for `width`; the others have no replacement |
+| `Spy.AFFIX`, `Toggle.BUTTONS` | Nothing: Bootstrap 5 removed affix and the buttons plugin |
+
+`NavbarPosition.FIXED_TOP` / `FIXED_BOTTOM` now write `fixed-top` / `fixed-bottom` and fix the navbar, and `RowContentJustifyAlign` writes `justify-content-*` (it wrote `align-items-*`, so it aligned vertically); `EVENLY` is new.
+
+### Checkboxes and radios use form-check markup
+
+`Radio`, `InlineRadio` and `InlineCheckBox` now render the same Bootstrap 5 markup as `CheckBox`, and every label is linked to its input with `for`, so clicking the text toggles the input:
+
+```html
+<div class="form-check">                      <!-- InlineRadio / InlineCheckBox: form-check form-check-inline -->
+  <input type="radio" class="form-check-input" id="gwt-uid-2">
+  <label class="form-check-label" for="gwt-uid-2">Label</label>
+</div>
+```
+
+`Radio` used Bootstrap 3's `div.radio > label > input`, and the inline widgets used a `label.form-check` wrapper without `form-check-inline` or the input / label classes. If you styled `.radio` or those wrappers yourself, target `.form-check` instead.
 
 ## Extras (`gwtbootstrap5-extras`)
 
@@ -246,6 +279,10 @@ summernote.addSummernoteImageUploadHandler(event -> {
 `insertImages(...)` now inserts the images as data URLs. In 0.1.x it called a command that doesn't exist in Summernote 0.9, so it never inserted anything.
 
 ## Other fixes that change behavior
+
+- `Spinner` is visible: `SpinnerType.BORDER` / `GROW` wrote `label-default` / `label-primary` instead of `spinner-border` / `spinner-grow`.
+- `Alert.setFade(true)` keeps the alert visible: it added `fade in`, and in Bootstrap 5 `fade` without `show` has opacity 0.
+- `Collapse` and `NavbarCollapse` start open when they should, and `isShown()` / `setIn()` work: they used Bootstrap 3's `in` instead of `show`.
 
 - `Toast.isShown()` returns whether the toast is shown. It used to return the jQuery object.
 - `Modal.setHideOtherModals(true)` works again: opening the modal hides the other open modals. It used the Bootstrap 3 `.modal.in` selector, which never matched in Bootstrap 5.
