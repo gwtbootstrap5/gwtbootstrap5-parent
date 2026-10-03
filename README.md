@@ -11,8 +11,10 @@ You will be able to easily add GWTBootstrap5 to your project by including the li
 </dependency>
 ```
 
+### Upgrading to 0.2.0
+0.2.0 replaces JSNI with JsInterop and removes jQuery from the core module. See [UPGRADING.md](UPGRADING.md) for the breaking changes and how to update your code.
+
 ### ToDo
-* Migrate to JSInterop
 * Extract datepicker and select engines to separate jar
 
 ### Final Release
