@@ -12,6 +12,10 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `Affix` | [Affix uses sticky positioning](#affix-uses-sticky-positioning) |
 | `Styles.FORM_CONTROL_RANGE` / `FORM_CONTROL_FILE`, or `InputRange` / `InputFile` with custom CSS | [InputRange and InputFile use Bootstrap 5 classes](#inputrange-and-inputfile-use-bootstrap-5-classes) |
 | `NavbarPosition.STATIC_TOP`, `ProgressType`, `Progress.setType` / `setActive`, `TableType.INVERSE`, `THeadType`, `ColumnOffset.XS_0` / `XS_12`, `ButtonType.LINK_OUTLINE`, or the `Styles` / `Spy` / `Toggle` constants listed there | [Bootstrap 3/4 constants removed](#bootstrap-34-constants-removed) |
+| Buttons without an explicit type, or `ButtonType.DEFAULT` | [Buttons default to btn-light](#buttons-default-to-btn-light) |
+| `Label` / `LabelType`, or `Styles.LABEL` | [Label is replaced by Badge](#label-is-replaced-by-badge) |
+| `NavbarType` | [Navbar theme uses data-bs-theme](#navbar-theme-uses-data-bs-theme) |
+| `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
 | CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
 | Bootbox `DialogOptions`, `AlertOptions`, `ConfirmOptions` or `PromptOptions` as a `JavaScriptObject` | [Bootbox](#bootbox) |
@@ -143,6 +147,61 @@ These constants wrote Bootstrap 3 or 4 classes that don't exist in Bootstrap 5, 
 | `Spy.AFFIX`, `Toggle.BUTTONS` | Nothing: Bootstrap 5 removed affix and the buttons plugin |
 
 `NavbarPosition.FIXED_TOP` / `FIXED_BOTTOM` now write `fixed-top` / `fixed-bottom` and fix the navbar, and `RowContentJustifyAlign` writes `justify-content-*` (it wrote `align-items-*`, so it aligned vertically); `EVENLY` is new.
+
+### Buttons default to btn-light
+
+`ButtonType.DEFAULT` wrote Bootstrap 3's `btn-default`, which doesn't exist in Bootstrap 5, so every button created without a type had no color. It's removed, and `Button`, `AnchorButton`, `SubmitButton`, `CheckBoxButton`, `RadioButton`, the toggle buttons and `ButtonCell` now default to `ButtonType.LIGHT` (`btn-light`), the closest to Bootstrap 3's white default button.
+
+Before:
+
+```java
+button.setType(ButtonType.DEFAULT);
+```
+
+After:
+
+```java
+button.setType(ButtonType.LIGHT); // or SECONDARY, SECONDARY_OUTLINE, ...
+```
+
+### Label is replaced by Badge
+
+Bootstrap 4 removed labels. `Label` rendered a `badge` whose `label-*` colors don't exist, so it had no color. `Label` and `LabelType` are removed; use `Badge` and `BadgeType`. `Styles.LABEL` is renamed `Styles.BADGE`.
+
+| 0.1.x | 0.2.0 |
+| --- | --- |
+| `new Label(LabelType.SUCCESS, "Saved")` | `Badge badge = new Badge("Saved"); badge.setType(BadgeType.SUCCESS);` |
+| `LabelType.DEFAULT` | `BadgeType.SECONDARY` |
+| `LabelType.PRIMARY`, `SUCCESS`, `INFO`, `WARNING`, `DANGER` | The `BadgeType` constant with the same name |
+
+In UiBinder, replace `<b:Label type="SUCCESS" text="Saved"/>` with `<b:Badge type="SUCCESS" text="Saved"/>`.
+
+### Navbar theme uses data-bs-theme
+
+Bootstrap 5.3 deprecated `navbar-light` / `navbar-dark` in favor of the `data-bs-theme` attribute, and `navbar-light` no longer has any CSS. `NavbarType.DEFAULT` / `INVERSE` are replaced by `LIGHT` / `DARK`, which set `data-bs-theme="light"` / `"dark"` on the navbar (its dropdowns follow). A new `Navbar` no longer gets a type, so it inherits the page's theme; `getType()` returns `null` until you set one, and `setType(null)` removes the attribute.
+
+Before:
+
+```java
+navbar.setType(NavbarType.INVERSE);
+```
+
+After:
+
+```java
+navbar.setType(NavbarType.DARK);
+```
+
+Combine it with a background utility class (`bg-dark`, `bg-body-tertiary`) as in Bootstrap's examples.
+
+### Removed widgets and methods
+
+| Removed | Why | Use instead |
+| --- | --- | --- |
+| `FormType`, `Form(FormType)`, `Form.setType` / `getType`, `FormPanel.setType` / `getType` | `form-inline` was removed in Bootstrap 5 | An inline form is a `Row` with `Column`s (`row g-3 align-items-center`) |
+| `ButtonGroup.setToggle`, `Styles.BTN_GROUP_TOGGLE` | `btn-group-toggle` and the buttons plugin were removed in Bootstrap 5 | Nothing: `CheckBoxButton` / `RadioButton` work in any `ButtonGroup` |
+| `AbstractButton.setDataLoadingText`, `Attributes.DATA_LOADING_TEXT` | The button loading state was Bootstrap 3 | Change the text and `setEnabled(false)` yourself, optionally with a `Spinner` |
+| `Caption`, `ThumbnailLink`, `Styles.CAPTION` | Thumbnails were removed in Bootstrap 4 | `Card`, or `Image` with `ImageType.THUMBNAIL` inside an `Anchor` |
 
 ### Checkboxes and radios use form-check markup
 
