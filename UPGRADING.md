@@ -10,6 +10,8 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `org.gwtbootstrap5.client.shared.js.JQuery` or `EventHandler` | [Core jQuery wrapper removed](#core-jquery-wrapper-removed) |
 | `GwtBootstrap5ClientBundle.gwtBootstrap5()`, `jQuery()` or `jQueryMigrate()` | [Client bundle resources removed](#client-bundle-resources-removed) |
 | `Affix` | [Affix uses sticky positioning](#affix-uses-sticky-positioning) |
+| `Styles.FORM_CONTROL_RANGE`, or `InputRange` with custom CSS | [InputRange uses form-range](#inputrange-uses-form-range) |
+| The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
 | Bootbox `DialogOptions`, `AlertOptions`, `ConfirmOptions` or `PromptOptions` as a `JavaScriptObject` | [Bootbox](#bootbox) |
 | `TempusDominusLocales` or `AirDatepickerLocales` | [Datetimepicker locales](#datetimepicker-locales) |
 | `Range.toJsArray()`, `new Range(JsArrayNumber)`, or a subclass of `RangeBase` | [Range / slider](#range--slider) |
@@ -56,7 +58,23 @@ Bootstrap only registers its jQuery plugins (`$.fn.modal`, `$.fn.tooltip`, ...) 
 
 ### Bootstrap detection
 
-Core checks for `window.bootstrap` to decide whether to inject Bootstrap's JavaScript. If your host page already loads Bootstrap 5, core won't inject it again. The `*URL` entry point now loads Popper before Bootstrap, because Bootstrap reads the Popper global when it loads.
+Core checks for `window.bootstrap` to decide whether to inject Bootstrap's JavaScript. If your host page already loads Bootstrap 5, core won't inject it again.
+
+### Popper is loaded by core
+
+Bootstrap 5's dropdowns, popovers and tooltips need Popper, and so does Tempus Dominus. In 0.1.x, `GwtBootstrap5` didn't load Popper, so tooltips failed with `Bootstrap's tooltips require Popper` unless you also inherited the extras `popper` module.
+
+Core now includes Popper 2.11.8. `GwtBootstrap5` injects it (and `GwtBootstrap5URL` loads it from jsDelivr) before Bootstrap, whenever the `window.Popper` global is missing. This happens even if your host page already loads Bootstrap, because `bootstrap.bundle.js` embeds Popper without exposing that global, and Tempus Dominus needs it.
+
+The extras `popper` module is removed. Remove these inherits from your `.gwt.xml`:
+
+```xml
+<inherits name="org.gwtbootstrap5.extras.popper.Popper"/>
+<inherits name="org.gwtbootstrap5.extras.popper.PopperURL"/>
+<inherits name="org.gwtbootstrap5.extras.popper.PopperNoResources"/>
+```
+
+If you use `GwtBootstrap5NoResources`, your host page loads Bootstrap itself and must also provide the `window.Popper` global (load `popper.min.js`) if you use Tempus Dominus.
 
 ## Core (`gwtbootstrap5`)
 
@@ -97,6 +115,12 @@ Bootstrap 5 removed the affix plugin, so `Affix` didn't work on 0.1.x: it called
 
 - The offset is the distance in pixels **from the top of the viewport** at which the element sticks. In Bootstrap 3's affix it was the number of pixels scrolled before the element was pinned.
 - A sticky element sticks within its parent, so the parent must be taller than the element.
+
+### InputRange uses form-range
+
+`InputRange` used the Bootstrap 4 classes `form-control form-control-range`, so it rendered as an unstyled slider inside a text-field border. It now has only Bootstrap 5's `form-range` class.
+
+`Styles.FORM_CONTROL_RANGE` (`"form-control-range"`) is replaced by `Styles.FORM_RANGE` (`"form-range"`). If you styled `.form-control-range` yourself, target `.form-range` instead.
 
 ## Extras (`gwtbootstrap5-extras`)
 
