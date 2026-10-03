@@ -10,7 +10,7 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `org.gwtbootstrap5.client.shared.js.JQuery` or `EventHandler` | [Core jQuery wrapper removed](#core-jquery-wrapper-removed) |
 | `GwtBootstrap5ClientBundle.gwtBootstrap5()`, `jQuery()` or `jQueryMigrate()` | [Client bundle resources removed](#client-bundle-resources-removed) |
 | `Affix` | [Affix uses sticky positioning](#affix-uses-sticky-positioning) |
-| `Styles.FORM_CONTROL_RANGE`, or `InputRange` with custom CSS | [InputRange uses form-range](#inputrange-uses-form-range) |
+| `Styles.FORM_CONTROL_RANGE` / `FORM_CONTROL_FILE`, or `InputRange` / `InputFile` with custom CSS | [InputRange and InputFile use Bootstrap 5 classes](#inputrange-and-inputfile-use-bootstrap-5-classes) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
 | Bootbox `DialogOptions`, `AlertOptions`, `ConfirmOptions` or `PromptOptions` as a `JavaScriptObject` | [Bootbox](#bootbox) |
 | `TempusDominusLocales` or `AirDatepickerLocales` | [Datetimepicker locales](#datetimepicker-locales) |
@@ -116,11 +116,13 @@ Bootstrap 5 removed the affix plugin, so `Affix` didn't work on 0.1.x: it called
 - The offset is the distance in pixels **from the top of the viewport** at which the element sticks. In Bootstrap 3's affix it was the number of pixels scrolled before the element was pinned.
 - A sticky element sticks within its parent, so the parent must be taller than the element.
 
-### InputRange uses form-range
+### InputRange and InputFile use Bootstrap 5 classes
 
 `InputRange` used the Bootstrap 4 classes `form-control form-control-range`, so it rendered as an unstyled slider inside a text-field border. It now has only Bootstrap 5's `form-range` class.
 
 `Styles.FORM_CONTROL_RANGE` (`"form-control-range"`) is replaced by `Styles.FORM_RANGE` (`"form-range"`). If you styled `.form-control-range` yourself, target `.form-range` instead.
+
+`InputFile` also loses the Bootstrap 4 class `form-control-file`, which Bootstrap 5 doesn't style; it keeps `form-control`, which is all Bootstrap 5 needs. `Styles.FORM_CONTROL_FILE` is removed. If you styled `.form-control-file` yourself, target `.form-control[type=file]` instead.
 
 ## Extras (`gwtbootstrap5-extras`)
 
