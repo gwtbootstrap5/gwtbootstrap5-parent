@@ -16,6 +16,7 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `Label` / `LabelType`, or `Styles.LABEL` | [Label is replaced by Badge](#label-is-replaced-by-badge) |
 | `NavbarType` | [Navbar theme uses data-bs-theme](#navbar-theme-uses-data-bs-theme) |
 | `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
+| `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` or `SHAKE` | [Animate uses animate.css 4 names](#animate-uses-animatecss-4-names) |
 | `ColumnPull` / `ColumnPush`, `Column.setPull` / `setPush` | [Column order replaces pull and push](#column-order-replaces-pull-and-push) |
 | `CheckBoxButton` / `RadioButton` with your own CSS or click handlers | [Check and radio buttons use btn-check](#check-and-radio-buttons-use-btn-check) |
 | CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
@@ -131,6 +132,10 @@ Bootstrap 5 removed the affix plugin, so `Affix` didn't work on 0.1.x: it called
 `Styles.FORM_CONTROL_RANGE` (`"form-control-range"`) is replaced by `Styles.FORM_RANGE` (`"form-range"`). If you styled `.form-control-range` yourself, target `.form-range` instead.
 
 `InputFile` also loses the Bootstrap 4 class `form-control-file`, which Bootstrap 5 doesn't style; it keeps `form-control`, which is all Bootstrap 5 needs. `Styles.FORM_CONTROL_FILE` is removed. If you styled `.form-control-file` yourself, target `.form-control[type=file]` instead.
+
+### New: InputColor
+
+`InputColor` is Bootstrap 5's native color picker (`<input type="color" class="form-control form-control-color">`). Its value is a lowercase hex color such as `#563d7c`, and it fires `ValueChangeEvent` like any input. It needs no jQuery; use the extras `ColorPicker` when you need its inline panel or an alpha channel.
 
 ### Bootstrap 3/4 constants removed
 
@@ -335,6 +340,16 @@ Behavior changes:
 - Changing an option on an attached slider (`setStep`, `setTicks`, `setFormatter`, ...) recreates the slider and keeps its current value. In 0.1.x the value was reset, and adding ticks after creation broke the layout. `refresh()` still calls bootstrap-slider's `refresh()`.
 - `getOrientation()`, `getTooltip()`, `getSelection()`, `getHandle()`, `getScale()` and `getTooltipPosition()` return the actual setting. They used to always return the default.
 
+### Animate uses animate.css 4 names
+
+The bundled animate.css 4 renamed three animations, so `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` and `SHAKE` did nothing. They're replaced by the version 4 names:
+
+| 0.1.x | 0.2.0 |
+| --- | --- |
+| `Animation.LIGHTSPEED_IN` | `Animation.LIGHTSPEED_IN_RIGHT` or `LIGHTSPEED_IN_LEFT` |
+| `Animation.LIGHTSPEED_OUT` | `Animation.LIGHTSPEED_OUT_RIGHT` or `LIGHTSPEED_OUT_LEFT` |
+| `Animation.SHAKE` | `Animation.SHAKE_X` or `SHAKE_Y` |
+
 ### Summernote
 
 `SummernoteImageUploadEvent.ImageFile` is removed. Uploaded images are `elemental2.dom.File` objects:
@@ -373,6 +388,9 @@ summernote.addSummernoteImageUploadHandler(event -> {
 `insertImages(...)` now inserts the images as data URLs. In 0.1.x it called a command that doesn't exist in Summernote 0.9, so it never inserted anything.
 
 ## Other fixes that change behavior
+
+- Summernote is 0.9.1 (it was 0.9.0 bundled and 0.9.1 from the CDN) and loads only its Bootstrap 5 build: the Bootstrap 3 build and its CSS were loaded too, and overridden.
+- `IconTypeFABrands.BRAND_11TY`, `BRAND_42_GROUP` and `BRAND_500PX` show their icons: they wrote `fa-brand-11ty` and so on instead of `fa-11ty`, `fa-42-group` and `fa-500px`.
 
 - `Spinner` is visible: `SpinnerType.BORDER` / `GROW` wrote `label-default` / `label-primary` instead of `spinner-border` / `spinner-grow`.
 - `Alert.setFade(true)` keeps the alert visible: it added `fade in`, and in Bootstrap 5 `fade` without `show` has opacity 0.
