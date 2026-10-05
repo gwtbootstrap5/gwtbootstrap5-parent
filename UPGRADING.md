@@ -14,12 +14,13 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `NavbarPosition.STATIC_TOP`, `ProgressType`, `Progress.setType` / `setActive`, `TableType.INVERSE`, `THeadType`, `ColumnOffset.XS_0` / `XS_12`, `ButtonType.LINK_OUTLINE`, or the `Styles` / `Spy` / `Toggle` constants listed there | [Bootstrap 3/4 constants removed](#bootstrap-34-constants-removed) |
 | Buttons without an explicit type, or `ButtonType.DEFAULT` | [Buttons default to btn-light](#buttons-default-to-btn-light) |
 | `Label` / `LabelType`, or `Styles.LABEL` | [Label is replaced by Badge](#label-is-replaced-by-badge) |
-| `NavbarType` | [Navbar theme uses data-bs-theme](#navbar-theme-uses-data-bs-theme) |
+| `NavbarType` | [Navbar theme uses ColorMode](#navbar-theme-uses-colormode) |
 | `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
 | `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` or `SHAKE` | [Animate uses animate.css 4 names](#animate-uses-animatecss-4-names) |
 | `ColumnPull` / `ColumnPush`, `Column.setPull` / `setPush` | [Column order replaces pull and push](#column-order-replaces-pull-and-push) |
 | `DropDownMenu.setFloat`, or `float` on a `DropDownMenu` in UiBinder | [Dropdown menus align with setAlignment](#dropdown-menus-align-with-setalignment) |
 | `ListGroupItem.setFlush` | [List group flush and horizontal](#list-group-flush-and-horizontal) |
+| CSS of your own for `.badge.bg-*`, or for `ListBox` as `.form-control` | [Badges use text-bg and ListBox uses form-select](#badges-use-text-bg-and-listbox-uses-form-select) |
 | `CheckBoxButton` / `RadioButton` with your own CSS or click handlers | [Check and radio buttons use btn-check](#check-and-radio-buttons-use-btn-check) |
 | CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
@@ -185,9 +186,9 @@ Bootstrap 4 removed labels. `Label` rendered a `badge` whose `label-*` colors do
 
 In UiBinder, replace `<b:Label type="SUCCESS" text="Saved"/>` with `<b:Badge type="SUCCESS" text="Saved"/>`.
 
-### Navbar theme uses data-bs-theme
+### Navbar theme uses ColorMode
 
-Bootstrap 5.3 deprecated `navbar-light` / `navbar-dark` in favor of the `data-bs-theme` attribute, and `navbar-light` no longer has any CSS. `NavbarType.DEFAULT` / `INVERSE` are replaced by `LIGHT` / `DARK`, which set `data-bs-theme="light"` / `"dark"` on the navbar (its dropdowns follow). A new `Navbar` no longer gets a type, so it inherits the page's theme; `getType()` returns `null` until you set one, and `setType(null)` removes the attribute.
+Bootstrap 5.3 deprecated `navbar-light` / `navbar-dark` in favor of the `data-bs-theme` attribute, and `navbar-light` no longer has any CSS. `NavbarType` is removed: `Navbar.setType` takes a `ColorMode` (`LIGHT` / `DARK`), which sets `data-bs-theme="light"` / `"dark"` on the navbar (its dropdowns follow). `ColorMode` is the same enum `ColorModeHelper` uses for the page and other widgets. In UiBinder, `type="DARK"` works as before. A new `Navbar` no longer gets a type, so it inherits the page's theme; `getType()` returns `null` until you set one, and `setType(null)` removes the attribute.
 
 Before:
 
@@ -198,7 +199,7 @@ navbar.setType(NavbarType.INVERSE);
 After:
 
 ```java
-navbar.setType(NavbarType.DARK);
+navbar.setType(ColorMode.DARK);
 ```
 
 Combine it with a background utility class (`bg-dark`, `bg-body-tertiary`) as in Bootstrap's examples.
@@ -329,6 +330,19 @@ New:
   ```
 
 - **`Placeholder`** is a loading bar (`span.placeholder`), with `setColumnSize(ColumnSize)` for its width, `setSize(PlaceholderSize)` and `setColor(ContextualBackground)`. Animate the placeholders in a container with `StyleHelper.setPlaceholderAnimation(container, PlaceholderAnimation.GLOW)` (or `WAVE`).
+
+### New: color modes and helpers
+
+- **Color modes:** `ColorModeHelper.setPageColorMode(ColorMode.DARK)` writes `data-bs-theme` on `<html>`. `setColorMode(widget, mode)` does it for one widget and its descendants. `followSystem()` follows the browser's `prefers-color-scheme` until you remove the registration it returns.
+- **Layout widgets:** `Ratio` (`RatioType`, 16:9 by default), `HStack` and `VStack` (with `setGap(0..5)`), and `VerticalRule` (`div.vr`).
+- **Helper enums:** `TextBackground`, `LinkColor`, `LinkOpacity`, `LinkOffset`, `LinkUnderline` and `FocusRing`. Apply them with `StyleHelper.addEnumStyleName`.
+- **New constants:** `Styles.STRETCHED_LINK`, `ICON_LINK`, `ICON_LINK_HOVER` and `FOCUS_RING`.
+
+### Badges use text-bg and ListBox uses form-select
+
+`BadgeType` writes `text-bg-*` instead of `bg-*`, so the text contrasts with the background (dark text on `WARNING`, `INFO` and `LIGHT`). `Badge.setType` now replaces the previous type instead of adding to it.
+
+`ListBox` writes `form-select`, Bootstrap 5's class for a `<select>`. It used `form-control`, which left the select without its arrow. `FormGroup` and `Form` also add `form-select` to a `ListBox` you put in them.
 
 ### Checkboxes and radios use form-check markup
 
