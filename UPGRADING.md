@@ -18,6 +18,8 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
 | `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` or `SHAKE` | [Animate uses animate.css 4 names](#animate-uses-animatecss-4-names) |
 | `ColumnPull` / `ColumnPush`, `Column.setPull` / `setPush` | [Column order replaces pull and push](#column-order-replaces-pull-and-push) |
+| `DropDownMenu.setFloat`, or `float` on a `DropDownMenu` in UiBinder | [Dropdown menus align with setAlignment](#dropdown-menus-align-with-setalignment) |
+| `ListGroupItem.setFlush` | [List group flush and horizontal](#list-group-flush-and-horizontal) |
 | `CheckBoxButton` / `RadioButton` with your own CSS or click handlers | [Check and radio buttons use btn-check](#check-and-radio-buttons-use-btn-check) |
 | CSS of your own for `Radio`, `InlineRadio` or `InlineCheckBox` | [Checkboxes and radios use form-check markup](#checkboxes-and-radios-use-form-check-markup) |
 | The extras `org.gwtbootstrap5.extras.popper` module | [Popper is loaded by core](#popper-is-loaded-by-core) |
@@ -280,6 +282,23 @@ New: `AccordionItem`, `AccordionHeader` and `AccordionBody` build the accordion 
 - **Opening and closing:** `AccordionItem.setOpen` sets the initial state. Once the item is attached, it animates like a click, and `isOpen()` reads the current state.
 - **Flush:** `Accordion.setFlush(true)` adds `accordion-flush`.
 - **Header content:** `AccordionHeader` takes `text` or child widgets; both go inside the button.
+
+### List group flush and horizontal
+
+`ListGroupItem.setFlush` is removed: it put `list-group-flush` on the item, where Bootstrap ignores it. Use `ListGroup.setFlush(true)` on the group instead.
+
+New: `ListGroup.setHorizontal(ListGroupHorizontal)` lays the items out in a row, `ALWAYS` or from a breakpoint up (`SM` to `XXL`).
+
+### More Bootstrap 5.3 options
+
+New:
+
+- **Fullscreen modal:** `Modal.setFullscreen(ModalFullscreen)` covers the viewport, `ALWAYS` or below a breakpoint (`SM_DOWN` to `XXL_DOWN`). It combines with `setSize`.
+- **Underline nav:** `NavUnderline`, a nav whose active link is underlined (`nav-underline`), alongside `NavTabs` and `NavPills`.
+- **`setFill` on every nav:** it moves from `NavPills` to `Nav`, so `NavTabs` and `NavUnderline` have it too. `NavPills` code keeps working.
+- **Card groups:** `CardGroup` joins `Card`s in a row of equal height (`card-group`).
+
+`Nav.setVertical(false)` now removes `flex-column`. It used to remove `nav-justified` instead, so the nav stayed vertical and lost justification.
 
 ### Checkboxes and radios use form-check markup
 
