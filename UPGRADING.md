@@ -263,6 +263,24 @@ New: `DropDown`, `ListDropDown` and `NavbarDropdown` implement `HasDropDown`:
 
 The toggle must be a direct child with `data-bs-toggle="dropdown"`, as in the existing UiBinder examples.
 
+### Accordion items
+
+New: `AccordionItem`, `AccordionHeader` and `AccordionBody` build the accordion markup. When an item is attached, it links the header's button to the body with a generated id (`data-bs-target`, `aria-controls`, `aria-expanded`), so you no longer assemble `Collapse` and ids by hand:
+
+```xml
+<b:Accordion flush="true">
+    <b:AccordionItem open="true">
+        <b:AccordionHeader text="First"/>
+        <b:AccordionBody>...</b:AccordionBody>
+    </b:AccordionItem>
+</b:Accordion>
+```
+
+- **One item open at a time:** this is the default; each body gets `data-bs-parent` pointing to the accordion. `Accordion.setAlwaysOpen(true)` lets several stay open.
+- **Opening and closing:** `AccordionItem.setOpen` sets the initial state. Once the item is attached, it animates like a click, and `isOpen()` reads the current state.
+- **Flush:** `Accordion.setFlush(true)` adds `accordion-flush`.
+- **Header content:** `AccordionHeader` takes `text` or child widgets; both go inside the button.
+
 ### Checkboxes and radios use form-check markup
 
 `Radio`, `InlineRadio` and `InlineCheckBox` now render the same Bootstrap 5 markup as `CheckBox`, and every label is linked to its input with `for`, so clicking the text toggles the input:
