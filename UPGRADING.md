@@ -243,6 +243,26 @@ The root element is still the `label.btn` with the input as its first child, so 
 
 New: `Modal.setCentered(true)` centers the dialog vertically (`modal-dialog-centered`), and `Modal.setScrollable(true)` scrolls the body instead of the page (`modal-dialog-scrollable`). Both work as UiBinder attributes: `<b:Modal centered="true" scrollable="true">`.
 
+### Dropdown menus align with setAlignment
+
+`DropDownMenu.setFloat` now throws `UnsupportedOperationException`. In Bootstrap 5, Popper positions the menu, so `float-end` never moved it. Use `setAlignment` instead. To change the alignment from a breakpoint up, add `setBreakpointAlignment`:
+
+```xml
+<b:DropDownMenu alignment="END">                                 <!-- was float="RIGHT_XS" -->
+<b:DropDownMenu alignment="END" breakpointAlignment="LG_START">  <!-- end, start from lg up -->
+```
+
+### Dropdowns can be controlled from Java
+
+New: `DropDown`, `ListDropDown` and `NavbarDropdown` implement `HasDropDown`:
+
+- `show()`, `hide()` and `toggle()`, through the new native type `BootstrapDropdown`.
+- `ShowEvent`, `ShownEvent`, `HideEvent` and `HiddenEvent`, the same events `Collapse` uses.
+- `setDirection(DropDownDirection)`: `DOWN`, `DOWN_CENTER`, `UP`, `UP_CENTER`, `START` or `END`.
+- `setAutoClose(DropDownAutoClose)`: `TRUE`, `FALSE`, `INSIDE` or `OUTSIDE`, written as `data-bs-auto-close` on the toggle.
+
+The toggle must be a direct child with `data-bs-toggle="dropdown"`, as in the existing UiBinder examples.
+
 ### Checkboxes and radios use form-check markup
 
 `Radio`, `InlineRadio` and `InlineCheckBox` now render the same Bootstrap 5 markup as `CheckBox`, and every label is linked to its input with `for`, so clicking the text toggles the input:
