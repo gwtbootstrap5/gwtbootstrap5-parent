@@ -16,7 +16,8 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 | Buttons without an explicit type, or `ButtonType.DEFAULT` | [Buttons default to btn-light](#buttons-default-to-btn-light) |
 | `Label` / `LabelType`, or `Styles.LABEL` | [Label is replaced by Badge](#label-is-replaced-by-badge) |
 | `NavbarType` | [Navbar theme uses ColorMode](#navbar-theme-uses-colormode) |
-| `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink` | [Removed widgets and methods](#removed-widgets-and-methods) |
+| `FormType`, `Form(FormType)`, `ButtonGroup.setToggle`, `setDataLoadingText`, `Caption`, `ThumbnailLink`, `InputGroupPrepend` / `InputGroupAppend`, `CellTable.setResponsive` / `DataGrid.setResponsive` | [Removed widgets and methods](#removed-widgets-and-methods) |
+| Validation with `HelpBlock` and your own CSS for `.is-invalid` on a `FormGroup` | [Validation errors use Bootstrap 5 markup](#validation-errors-use-bootstrap-5-markup) |
 | `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` or `SHAKE` | [Animate uses animate.css 4 names](#animate-uses-animatecss-4-names) |
 | `ColumnPull` / `ColumnPush`, `Column.setPull` / `setPush` | [Column order replaces pull and push](#column-order-replaces-pull-and-push) |
 | `DropDownMenu.setFloat`, or `float` on a `DropDownMenu` in UiBinder | [Dropdown menus align with setAlignment](#dropdown-menus-align-with-setalignment) |
@@ -215,6 +216,17 @@ Combine it with a background utility class (`bg-dark`, `bg-body-tertiary`) as in
 | `ButtonGroup.setToggle`, `Styles.BTN_GROUP_TOGGLE` | `btn-group-toggle` and the buttons plugin were removed in Bootstrap 5 | Nothing: `CheckBoxButton` / `RadioButton` work in any `ButtonGroup` |
 | `AbstractButton.setDataLoadingText`, `Attributes.DATA_LOADING_TEXT` | The button loading state was Bootstrap 3 | Change the text and `setEnabled(false)` yourself, optionally with a `Spinner` |
 | `Caption`, `ThumbnailLink`, `Styles.CAPTION` | Thumbnails were removed in Bootstrap 4 | `Card`, or `Image` with `ImageType.THUMBNAIL` inside an `Anchor` |
+| `InputGroupPrepend`, `InputGroupAppend` | `input-group-prepend` / `-append` were removed in Bootstrap 5; the empty wrappers broke the group's rounded corners | Put `InputGroupText`, buttons and controls directly in the `InputGroup` |
+| `CellTable.setResponsive`, `DataGrid.setResponsive`, `TableResponsiveness` | They put `table-responsive-*` on the table, where Bootstrap ignores it | Wrap the table in a `div` with `table-responsive` (or `table-responsive-lg`, ...) |
+
+### Validation errors use Bootstrap 5 markup
+
+In 0.1.x a failed validation set `is-invalid` on the `FormGroup` and wrote the message into the `HelpBlock` as plain help text, so nothing turned red. The default error handler now follows Bootstrap 5:
+
+- **Invalid control:** `is-invalid` goes on the control itself (red border). The `FormGroup` still gets it too, for your own CSS.
+- **Error message:** the `HelpBlock` shows it as `invalid-feedback` (red).
+- **Fixed or reset field:** the `HelpBlock` gets its help text back. It used to be left empty.
+- **Several failing validators:** the messages are joined with `; ` instead of repeating the first one.
 
 ### Column order replaces pull and push
 
@@ -310,7 +322,7 @@ New:
 
 ```xml
 <b:Button dataToggle="OFFCANVAS" dataTarget="#menu">Menu</b:Button>
-<b:Offcanvas id="menu" placement="END">
+<b:Offcanvas b:id="menu" placement="END">
     <b:OffcanvasHeader title="Menu"/>
     <b:OffcanvasBody>...</b:OffcanvasBody>
 </b:Offcanvas>
@@ -496,6 +508,10 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - Summernote is 0.9.1 (it was 0.9.0 bundled and 0.9.1 from the CDN) and loads only its Bootstrap 5 build: the Bootstrap 3 build and its CSS were loaded too, and overridden.
 - `IconTypeFABrands.BRAND_11TY`, `BRAND_42_GROUP` and `BRAND_500PX` show their icons: they wrote `fa-brand-11ty` and so on instead of `fa-11ty`, `fa-42-group` and `fa-500px`.
 
+- `Row.setContentJustifyAlign` and `setContentVerticalAlign` keep the `row` class: they replaced every class of the row, so it stopped being a grid row.
+- `Heading`'s sub text is faded (`text-body-secondary`), as Bootstrap 3 did by itself.
+- `DeviceSize.XXL` (1400px and up) is new, so `setVisibleOn` / `setHiddenOn` cover every Bootstrap 5 breakpoint.
+- `GwtBootstrap5URL` loads Bootstrap Icons from the CDN. It loaded Font Awesome, which core doesn't use.
 - `Spinner` is visible: `SpinnerType.BORDER` / `GROW` wrote `label-default` / `label-primary` instead of `spinner-border` / `spinner-grow`.
 - `Alert.setFade(true)` keeps the alert visible: it added `fade in`, and in Bootstrap 5 `fade` without `show` has opacity 0.
 - `Collapse` and `NavbarCollapse` start open when they should, and `isShown()` / `setIn()` work: they used Bootstrap 3's `in` instead of `show`.
