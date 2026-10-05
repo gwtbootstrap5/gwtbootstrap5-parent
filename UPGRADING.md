@@ -6,6 +6,7 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 
 | You use | Section |
 | --- | --- |
+| The `org.gwtbootstrap5` Maven `groupId` (every project) | [Update the dependency](#update-the-dependency) |
 | jQuery in your own code, relying on GWTBootstrap5 to load it | [jQuery is no longer loaded by core](#jquery-is-no-longer-loaded-by-core) |
 | `org.gwtbootstrap5.client.shared.js.JQuery` or `EventHandler` | [Core jQuery wrapper removed](#core-jquery-wrapper-removed) |
 | `GwtBootstrap5ClientBundle.gwtBootstrap5()`, `jQuery()` or `jQueryMigrate()` | [Client bundle resources removed](#client-bundle-resources-removed) |
@@ -31,14 +32,16 @@ This is a clean break: the old signatures are removed, not deprecated. Most appl
 
 ## Update the dependency
 
+The Maven `groupId` changes from `org.gwtbootstrap5` to `io.github.gwtbootstrap5`, the namespace 0.2.0 is published under on Maven Central. The Java packages and GWT module names stay `org.gwtbootstrap5`, so only the dependency changes:
+
 ```xml
 <dependency>
-  <groupId>org.gwtbootstrap5</groupId>
+  <groupId>io.github.gwtbootstrap5</groupId>
   <artifactId>gwtbootstrap5</artifactId>
   <version>0.2.0</version>
 </dependency>
 <dependency>
-  <groupId>org.gwtbootstrap5</groupId>
+  <groupId>io.github.gwtbootstrap5</groupId>
   <artifactId>gwtbootstrap5-extras</artifactId>
   <version>0.2.0</version>
 </dependency>
