@@ -300,6 +300,23 @@ New:
 
 `Nav.setVertical(false)` now removes `flex-column`. It used to remove `nav-justified` instead, so the nav stayed vertical and lost justification.
 
+### New: Offcanvas
+
+`Offcanvas` is Bootstrap 5's sidebar panel. Put an `OffcanvasHeader` (a title and a close button) and an `OffcanvasBody` in it, and open it from a button or from Java:
+
+```xml
+<b:Button dataToggle="OFFCANVAS" dataTarget="#menu">Menu</b:Button>
+<b:Offcanvas id="menu" placement="END">
+    <b:OffcanvasHeader title="Menu"/>
+    <b:OffcanvasBody>...</b:OffcanvasBody>
+</b:Offcanvas>
+```
+
+- **Placement and responsiveness:** `setPlacement` takes `START`, `END`, `TOP` or `BOTTOM`. `setResponsive(OffcanvasResponsive)` makes it an offcanvas only below a breakpoint (`SM` to `XXL`); from the breakpoint up, the content shows in the page.
+- **Options:** `setBackdrop(OffcanvasBackdrop)` takes `TRUE`, `FALSE` or `STATIC`. `setKeyboard` controls whether Escape closes the panel, and `setScroll` whether the page scrolls while it's open.
+- **Control and events:** `show()`, `hide()` and `toggle()`. It fires `ShowEvent`, `ShownEvent`, `HideEvent` and `HiddenEvent`, plus the new `HidePreventedEvent` when a static backdrop or Escape with the keyboard off refuses to close it.
+- **New constants:** `Toggle.OFFCANVAS` and `ButtonDismiss.OFFCANVAS`.
+
 ### Checkboxes and radios use form-check markup
 
 `Radio`, `InlineRadio` and `InlineCheckBox` now render the same Bootstrap 5 markup as `CheckBox`, and every label is linked to its input with `for`, so clicking the text toggles the input:
