@@ -78,6 +78,7 @@
     <modules>
         <module>gwtbootstrap5</module>
         <module>gwtbootstrap5-extras</module>
+        <module>gwtbootstrap5-demo</module>
     </modules>
 
     <properties>
@@ -363,6 +364,10 @@
                             <autoPublish>false</autoPublish>
                             <waitUntil>validated</waitUntil>
                             <deploymentName>GwtBootstrap5 ${project.version}</deploymentName>
+                            <!-- The demo is a web site published to GitHub Pages, not a library -->
+                            <excludeArtifacts>
+                                <artifact>gwtbootstrap5-demo</artifact>
+                            </excludeArtifacts>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -6,3 +6,7 @@
 	path = gwtbootstrap5-extras
 	url = https://github.com/gwtbootstrap5/gwtbootstrap5-extras.git
 	branch = master
+[submodule "gwtbootstrap5-demo"]
+	path = gwtbootstrap5-demo
+	url = https://github.com/gwtbootstrap5/gwtbootstrap5.github.io.git
+	branch = master

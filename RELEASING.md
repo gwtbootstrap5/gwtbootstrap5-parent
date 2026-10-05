@@ -40,20 +40,21 @@ The steps use `0.2.0` as the example.
 3. **Dry run.** Build and sign everything without uploading:
 
    ```sh
-   mvn -Prelease -DskipPublishing=true deploy
-   unzip -l target/central-publishing/central-bundle.zip
+   mvn -Prelease verify
+   ls gwtbootstrap5/target gwtbootstrap5-extras/target
    ```
 
-   The bundle must have, for each artifact, the pom and jars with their `.asc`, `.md5` and `.sha1` files.
-4. **Upload.** `mvn -Prelease deploy` uploads the bundle and waits until the portal validates it. The deployment then waits under *Deployments* in the portal. Check it there and click *Publish*; Maven Central shows it within about 30 minutes. A published version can't be deleted or replaced.
+   Each module must have its jar, `-sources.jar` and `-javadoc.jar`, each with an `.asc` signature. The `gwtbootstrap5-demo` module is never published. (`-DskipPublishing=true` skips the whole upload step and leaves no bundle to check.)
+4. **Upload.** `mvn -Prelease deploy` uploads the bundle and waits until the portal validates it. The deployment then waits under *Deployments* in the portal, where it can still be dropped. It holds `gwtbootstrap5-parent`, `gwtbootstrap5` and `gwtbootstrap5-extras`. Check it there and click *Publish*; Maven Central shows it within about 30 minutes. A published version can't be deleted or replaced.
 5. **Tags.** Tag the commit of each repository and push the tags:
 
    ```sh
-   for repo in gwtbootstrap5 gwtbootstrap5-extras .; do
+   for repo in gwtbootstrap5 gwtbootstrap5-extras gwtbootstrap5-demo .; do
      git -C $repo tag -a v0.2.0 -m "GwtBootstrap5 0.2.0"
    done
    git -C gwtbootstrap5 push git@github.com:gwtbootstrap5/gwtbootstrap5.git v0.2.0
    git -C gwtbootstrap5-extras push git@github.com:gwtbootstrap5/gwtbootstrap5-extras.git v0.2.0
+   git -C gwtbootstrap5-demo push git@github.com:gwtbootstrap5/gwtbootstrap5.github.io.git v0.2.0
    git push git@github.com:gwtbootstrap5/gwtbootstrap5-parent.git v0.2.0
    ```
 
