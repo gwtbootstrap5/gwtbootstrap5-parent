@@ -512,6 +512,22 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - `Heading`'s sub text is faded (`text-body-secondary`), as Bootstrap 3 did by itself.
 - `DeviceSize.XXL` (1400px and up) is new, so `setVisibleOn` / `setHiddenOn` cover every Bootstrap 5 breakpoint.
 - `GwtBootstrap5URL` loads Bootstrap Icons from the CDN. It loaded Font Awesome, which core doesn't use.
+- `CardText` is a `<p class="card-text">` (it was a text box) and takes its text as content: `<b:CardText>Some text</b:CardText>`.
+- `Breadcrumbs` marks only the last item `active`, with `aria-current="page"`; it marked every item, so every crumb looked like the current page. Its links lose `nav-link`, which squeezed them.
+- `Pagination` styles the `AnchorListItem`s added to it, including those of `addPreviousLink`, `addNextLink` and `rebuild`, as `page-item` / `page-link`. They were nav links and didn't look like a pagination.
+- `DropDownMenu` turns the links of its `AnchorListItem`s into `dropdown-item`s, and `DropDownItem` puts `dropdown-item` on its link instead of its `<li>`. `new DropDownItem(text)` gets the class too.
+- `Nav` and `NavbarNav` add `nav-item` to their list items, so `setFill` and `setJustified` stretch them. A `ListDropDown` toggle keeps `nav-link`.
+- `LinkedGroupItem` keeps `list-group-item`: `list-group-item-action` replaced it, so the items were plain links.
+- `VerticalButtonGroup` is only `btn-group-vertical`. It was also `btn-group`, which squeezed its buttons.
+- `NavbarCollapseButton` is a `navbar-toggler`, with `aria-expanded` and an `aria-label`. It had `navbar-collapse` and `btn` classes, so it didn't look like a toggler.
+- `CarouselIndicators` is a `<div>` of `<button>` indicators, as in Bootstrap 5. It was an `<ol>`, which showed its numbers. `CarouselIndicators` now extends `Div` instead of `OrderedList`.
+- New: `Carousel.setAutoplay(false)` stops a carousel from cycling by itself; it moves only through its controls or from Java.
+- The badge of a button, link or heading (`setBadgeText`) is `text-bg-secondary`. It had no color, so it was invisible on light and outline buttons.
+- `CheckBoxButton` and `RadioButton` toggle when their text is clicked in Chrome. Only a click on the button's padding toggled them.
+- `Popover` shows its title and content: its template used Bootstrap 3's `popover-title` / `popover-content`.
+- `Tooltip.setTitle`, `Popover.setTitle` and `Popover.setContent` update a tooltip that is already initialized, at once if it is showing. Bootstrap reads them only when it creates the tooltip, so the change was ignored.
+- A tooltip or popover is removed when its widget is detached. It stayed open on the page, for example after moving to another page of an app.
+
 - `Spinner` is visible: `SpinnerType.BORDER` / `GROW` wrote `label-default` / `label-primary` instead of `spinner-border` / `spinner-grow`.
 - `Alert.setFade(true)` keeps the alert visible: it added `fade in`, and in Bootstrap 5 `fade` without `show` has opacity 0.
 - `Collapse` and `NavbarCollapse` start open when they should, and `isShown()` / `setIn()` work: they used Bootstrap 3's `in` instead of `show`.
@@ -526,4 +542,5 @@ summernote.addSummernoteImageUploadHandler(event -> {
 
 ## Known issues
 
+- The icon modifiers (`setSize`, `setSpin`, `setPulse`, `setRotate`, `setFlip`, `setBorder`, `setFixedWidth`, `setInverse`, `IconStack`, and the `setIcon*` options of buttons and links) write Font Awesome classes. They only work with the Font Awesome extra; with the Bootstrap Icons of core they have no effect. Size and color Bootstrap Icons like text instead, for example with `fs-*` and `text-*` classes.
 - `Bootbox.init(SimpleCallback)` never calls its callback. In Bootbox 6, `bootbox.init(...)` reinitialises Bootbox instead of registering a callback. This was already the case in 0.1.x.
