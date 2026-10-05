@@ -317,6 +317,19 @@ New:
 - **Control and events:** `show()`, `hide()` and `toggle()`. It fires `ShowEvent`, `ShownEvent`, `HideEvent` and `HiddenEvent`, plus the new `HidePreventedEvent` when a static backdrop or Escape with the keyboard off refuses to close it.
 - **New constants:** `Toggle.OFFCANVAS` and `ButtonDismiss.OFFCANVAS`.
 
+### New: Switch, FloatingLabel and Placeholder
+
+- **`Switch`** is a `CheckBox` drawn as a toggle switch (`form-switch`, `role="switch"`): `<b:Switch text="Notifications"/>`.
+- **`FloatingLabel`** wraps one `TextBox`, `TextArea`, `Input` or `ListBox` and puts its label inside the control (`form-floating`). It links the label to the control, and gives a text control the `placeholder` that Bootstrap needs:
+
+  ```xml
+  <b:FloatingLabel text="Email address">
+      <b:TextBox/>
+  </b:FloatingLabel>
+  ```
+
+- **`Placeholder`** is a loading bar (`span.placeholder`), with `setColumnSize(ColumnSize)` for its width, `setSize(PlaceholderSize)` and `setColor(ContextualBackground)`. Animate the placeholders in a container with `StyleHelper.setPlaceholderAnimation(container, PlaceholderAnimation.GLOW)` (or `WAVE`).
+
 ### Checkboxes and radios use form-check markup
 
 `Radio`, `InlineRadio` and `InlineCheckBox` now render the same Bootstrap 5 markup as `CheckBox`, and every label is linked to its input with `for`, so clicking the text toggles the input:
