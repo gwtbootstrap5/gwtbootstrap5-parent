@@ -456,6 +456,23 @@ Behavior changes:
 - Changing an option on an attached slider (`setStep`, `setTicks`, `setFormatter`, ...) recreates the slider and keeps its current value. In 0.1.x the value was reset, and adding ticks after creation broke the layout. `refresh()` still calls bootstrap-slider's `refresh()`.
 - `getOrientation()`, `getTooltip()`, `getSelection()`, `getHandle()`, `getScale()` and `getTooltipPosition()` return the actual setting. They used to always return the default.
 
+### Select works out of the box
+
+`Select` and `MultipleSelect` can be used without a subclass. `setOptions`, `addOption` and the values used to throw a `NullPointerException` unless a subclass set an item provider, and they had no `@UiConstructor`, so they couldn't be declared in UiBinder:
+
+- Options become their `<option>`'s value and text with `String.valueOf(option)`, which suits strings, numbers and enums. For other objects, call the now public `setItemProvider(SelectBase.ItemProvider<T>)` to give each option a value and a text.
+- In UiBinder: `<s:Select ui:field="country" engine="TOMSELECT" placeholder="Pick a country"/>`.
+
+`Select` and the date pickers load their engine's script through a separate module. Inherit it with the widget's module, or the widget has no JavaScript behind it:
+
+```xml
+<inherits name="org.gwtbootstrap5.extras.select.Select"/>
+<inherits name="org.gwtbootstrap5.extras.select.client.TomSelectResources"/>  <!-- or TomSelectURL -->
+
+<inherits name="org.gwtbootstrap5.extras.datetimepicker.DateTimePicker"/>
+<inherits name="org.gwtbootstrap5.extras.datetimepicker.client.TempusDominusResources"/>  <!-- or AirDatepickerResources, or the URL variants -->
+```
+
 ### Animate uses animate.css 4 names
 
 The bundled animate.css 4 renamed three animations, so `Animation.LIGHTSPEED_IN`, `LIGHTSPEED_OUT` and `SHAKE` did nothing. They're replaced by the version 4 names:
@@ -524,6 +541,8 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - New: `Carousel.setAutoplay(false)` stops a carousel from cycling by itself; it moves only through its controls or from Java.
 - The badge of a button, link or heading (`setBadgeText`) is `text-bg-secondary`. It had no color, so it was invisible on light and outline buttons.
 - `CheckBoxButton` and `RadioButton` toggle when their text is clicked in Chrome. Only a click on the button's padding toggled them.
+- `FontAwesomeURL` loads Font Awesome from the CDN. It loaded Bootstrap Icons, so the Font Awesome icons had no font.
+- `TomSelectURL` loads the Tom Select CSS of the same version as its script (2.5.2); it loaded the 2.2.2 CSS.
 - `Popover` shows its title and content: its template used Bootstrap 3's `popover-title` / `popover-content`.
 - `Tooltip.setTitle`, `Popover.setTitle` and `Popover.setContent` update a tooltip that is already initialized, at once if it is showing. Bootstrap reads them only when it creates the tooltip, so the change was ignored.
 - A tooltip or popover is removed when its widget is detached. It stayed open on the page, for example after moving to another page of an app.
