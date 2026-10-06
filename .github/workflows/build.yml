@@ -61,6 +61,11 @@ jobs:
         working-directory: parent
         run: mvn -B -ntp install -P test -Ddependency-check.skip=true
 
+      # Every package listed in javadoc.documented.packages must stay fully documented
+      - name: Javadoc of the documented packages
+        working-directory: parent
+        run: mvn -B -ntp -P javadoc-check -pl gwtbootstrap5,gwtbootstrap5-extras javadoc:javadoc
+
       - name: Check every page of the demo
         working-directory: parent/gwtbootstrap5-demo
         run: |

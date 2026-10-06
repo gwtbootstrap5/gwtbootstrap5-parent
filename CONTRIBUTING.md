@@ -9,6 +9,6 @@ Also if you work on code please follow our coding conventions. We're not going t
 1. Indent by **four spaces**
 2. Opening brace goes in the same line as the statement (like [1TBS](http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS))
 3. Use `final` keyword wherever applicable
-4. Document your code (of course!)
+4. Document your code (of course!): the first sentence says what the widget is in Bootstrap's terms, and links to its page of the Bootstrap 5.3 documentation; widgets show a short UiBinder example. The packages listed in `javadoc.documented.packages` of each module's pom are checked in full by CI, so new public API there needs its javadoc: `mvn -P javadoc-check -pl gwtbootstrap5,gwtbootstrap5-extras javadoc:javadoc` runs the same check.
 
 Thank you!

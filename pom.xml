@@ -108,6 +108,9 @@
         <ossindex.serverId></ossindex.serverId>
 
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+
+        <!-- Packages the javadoc-check profile checks in full; each module lists its own. "none" checks nothing -->
+        <javadoc.documented.packages>none</javadoc.documented.packages>
     </properties>
 
     <dependencyManagement>
@@ -350,6 +353,39 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--
+            Full javadoc check (missing comments included) of the packages that are already
+            documented, listed by each module in javadoc.documented.packages. CI runs it with
+            mvn -P javadoc-check -pl gwtbootstrap5,gwtbootstrap5-extras javadoc:javadoc
+            The release javadoc keeps all,-missing until every package is in the list.
+        -->
+        <profile>
+            <id>javadoc-check</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <configuration>
+                            <locale>en</locale>
+                            <quiet>true</quiet>
+                            <noqualifier>all</noqualifier>
+                            <doclint>all</doclint>
+                            <additionalOptions>
+                                <additionalOption>-Xdoclint/package:${javadoc.documented.packages}</additionalOption>
+                                <!-- Report every gap, not only the first hundred -->
+                                <additionalOption>-Xmaxwarns 100000</additionalOption>
+                            </additionalOptions>
+                            <failOnWarnings>true</failOnWarnings>
+                            <links>
+                                <link>https://www.gwtproject.org/javadoc/latest</link>
+                            </links>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
