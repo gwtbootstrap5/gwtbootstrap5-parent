@@ -2,7 +2,13 @@
 
 ## Unreleased
 
-- `Tooltip` and `Popover`: `reconfigure()` and `setText(String)`, documented as deprecated since the GwtBootstrap3 days, now carry `@Deprecated`, so the compiler warns about them.
+### Breaking changes
+
+The APIs deprecated in 0.2.x are removed. [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#upgrading-to-030) has the replacement for each one.
+
+- `ListBox(boolean)`: use `new ListBox()` and `setMultipleSelect(true)`.
+- `Tooltip` and `Popover`: `reconfigure()`, which did nothing, and `setText(String)`, which only called `setTitle(String)`. **UiBinder templates with `<b:Tooltip text="…">` or `<b:Popover text="…">` stop compiling with GWT** (not with javac): use `title="…"`.
+- `ComplexWidget` overrides `insert(Widget, com.google.gwt.dom.client.Element, int, boolean)` instead of GWT's deprecated variant with `com.google.gwt.user.client.Element`. Only subclasses that override that protected method need to change.
 
 ## 0.2.0 (2026-10-06)
 

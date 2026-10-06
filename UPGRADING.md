@@ -1,3 +1,73 @@
+# Upgrading to 0.3.0
+
+GWTBootstrap5 0.3.0 removes the APIs that were deprecated in 0.2.x. None of them did anything the remaining API can't do, so each one has a one-line replacement:
+
+| You use | Use instead |
+| --- | --- |
+| `new ListBox(true)` | `new ListBox()` and `setMultipleSelect(true)` |
+| `Tooltip.reconfigure()` / `Popover.reconfigure()` | Nothing: it did nothing, delete the call |
+| `Tooltip.setText(String)` / `Popover.setText(String)` | `setTitle(String)`; in UiBinder, `title="…"` instead of `text="…"` |
+| A subclass of `ComplexWidget` that overrides `insert(Widget, com.google.gwt.user.client.Element, int, boolean)` | Override `insert(Widget, com.google.gwt.dom.client.Element, int, boolean)` |
+
+Update the dependency to `0.3.0`:
+
+```xml
+<dependency>
+  <groupId>io.github.gwtbootstrap5</groupId>
+  <artifactId>gwtbootstrap5</artifactId>
+  <version>0.3.0</version>
+</dependency>
+```
+
+### ListBox(boolean) removed
+
+The constructor that took the multiple selection flag is gone:
+
+```java
+// 0.2.x
+ListBox list = new ListBox(true);
+
+// 0.3.0
+ListBox list = new ListBox();
+list.setMultipleSelect(true);
+```
+
+In UiBinder, `multipleSelect="true"` on a `<b:ListBox>` keeps working.
+
+### Tooltip and Popover: reconfigure() and setText(String) removed
+
+`reconfigure()` has done nothing since the Bootstrap 3 days: delete the call. Call `recreate()` instead if you really need the tooltip or popover rebuilt.
+
+`setText(String)` only called `setTitle(String)`:
+
+```java
+// 0.2.x
+tooltip.setText("Saved");
+
+// 0.3.0
+tooltip.setTitle("Saved");
+```
+
+**Check your UiBinder templates.** UiBinder calls `setText` for a `text` attribute, so a template like this one no longer compiles:
+
+```xml
+<!-- 0.2.x -->
+<b:Tooltip text="Saved">
+  <b:Button text="Save"/>
+</b:Tooltip>
+
+<!-- 0.3.0 -->
+<b:Tooltip title="Saved">
+  <b:Button text="Save"/>
+</b:Tooltip>
+```
+
+The Java compiler doesn't see `.ui.xml` files, so the error only shows up when GWT compiles the module: `Class Tooltip has no appropriate setText() method`. The same applies to `<b:Popover text="…">`. The `text` of the widget inside (the `Button` above) is unrelated and stays.
+
+### ComplexWidget.insert with com.google.gwt.user.client.Element
+
+`ComplexWidget` used to override the variant of GWT's `ComplexPanel.insert` that takes the deprecated `com.google.gwt.user.client.Element`. It now overrides the one that takes `com.google.gwt.dom.client.Element`, and GWT's deprecated variant forwards to it. This only matters if you wrote your own subclass of a GWTBootstrap5 widget that overrides that protected method: change the type of its `container` parameter to `com.google.gwt.dom.client.Element`. Calls to `insert(Widget, int)` and `add(Widget)` don't change.
+
 # Upgrading to 0.2.0
 
 GWTBootstrap5 0.2.0 replaces all JSNI (`/*-{ }-*/` methods) and `JavaScriptObject` overlay types with JsInterop, in both `gwtbootstrap5` and `gwtbootstrap5-extras`. Core widgets now call Bootstrap 5's own JavaScript API instead of jQuery.
