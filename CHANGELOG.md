@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Nothing yet.
+
 ## 0.2.0 (2026-10-06)
 
 Bootstrap 5.3.8 for GWT, now on Maven Central as `io.github.gwtbootstrap5`.
