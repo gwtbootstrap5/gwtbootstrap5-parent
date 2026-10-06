@@ -10,6 +10,10 @@ The APIs deprecated in 0.2.x are removed. [UPGRADING.md](https://github.com/gwtb
 - `Tooltip` and `Popover`: `reconfigure()`, which did nothing, and `setText(String)`, which only called `setTitle(String)`. **UiBinder templates with `<b:Tooltip text="…">` or `<b:Popover text="…">` stop compiling with GWT** (not with javac): use `title="…"`.
 - `ComplexWidget` overrides `insert(Widget, com.google.gwt.dom.client.Element, int, boolean)` instead of GWT's deprecated variant with `com.google.gwt.user.client.Element`. Only subclasses that override that protected method need to change.
 
+### Fixes
+
+- Extras: `Select`, `MultipleSelect`, `DatePicker`, `TimePicker` and `DateTimePicker` destroy their JavaScript widget when they are removed from the page, and create it again when they are added back, keeping the selected value or date. Tempus Dominus pickers used to leave their widget in `<body>` every time their page was shown again.
+
 ## 0.2.0 (2026-10-06)
 
 Bootstrap 5.3.8 for GWT, now on Maven Central as `io.github.gwtbootstrap5`.
