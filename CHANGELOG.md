@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-Nothing yet.
+- `Tooltip` and `Popover`: `reconfigure()` and `setText(String)`, documented as deprecated since the GwtBootstrap3 days, now carry `@Deprecated`, so the compiler warns about them.
 
 ## 0.2.0 (2026-10-06)
 

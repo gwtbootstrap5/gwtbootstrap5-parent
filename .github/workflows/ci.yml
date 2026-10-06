@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # The local copy, so a pull request that changes the build is built with its own version
+    uses: ./.github/workflows/build.yml

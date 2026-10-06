@@ -1,0 +1,70 @@
+name: Dependency check
+
+# The OWASP dependency check of core and extras, against the master of every repository.
+# It downloads the NVD database, so it runs weekly and in the release workflow rather than
+# on every push.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Submodules at their master
+        run: git submodule update --remote
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      # The NVD database is updated incrementally from the copy the previous run saved
+      - uses: actions/cache@v6
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: nvd-${{ github.run_id }}
+          restore-keys: nvd-
+
+      - name: Maven settings
+        run: |
+          cat > ~/.m2/settings.xml <<'XML'
+          <settings>
+            <servers>
+              <server>
+                <id>ossindex</id>
+                <username>${env.OSSINDEX_USERNAME}</username>
+                <password>${env.OSSINDEX_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          XML
+
+      - name: Dependency check
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
+        run: mvn -B -ntp verify -DskipTests -Dossindex.serverId=ossindex
+
+      - name: Reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dependency-check-reports
+          path: '*/target/dependency-check-report.html'
+          if-no-files-found: ignore

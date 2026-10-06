@@ -1,0 +1,92 @@
+name: Build
+
+# Builds the whole reactor and runs every test, the GWT ones included, then opens every page
+# of the demo in headless Firefox. Each of the four repositories calls it from its own
+# workflow: the calling repository is checked out at the commit being built, the others at
+# their master, because core and extras need the parent's pom and the demo needs all three.
+on:
+  workflow_call:
+    inputs:
+      pages:
+        description: Upload the compiled demo as the GitHub Pages artifact
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    # With an explicit shell, a step fails when any command of a pipe fails
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out gwtbootstrap5-parent
+        uses: actions/checkout@v7
+        with:
+          repository: gwtbootstrap5/gwtbootstrap5-parent
+          ref: ${{ github.repository == 'gwtbootstrap5/gwtbootstrap5-parent' && github.sha || 'master' }}
+          path: parent
+      - name: Check out gwtbootstrap5
+        uses: actions/checkout@v7
+        with:
+          repository: gwtbootstrap5/gwtbootstrap5
+          ref: ${{ github.repository == 'gwtbootstrap5/gwtbootstrap5' && github.sha || 'master' }}
+          path: parent/gwtbootstrap5
+      - name: Check out gwtbootstrap5-extras
+        uses: actions/checkout@v7
+        with:
+          repository: gwtbootstrap5/gwtbootstrap5-extras
+          ref: ${{ github.repository == 'gwtbootstrap5/gwtbootstrap5-extras' && github.sha || 'master' }}
+          path: parent/gwtbootstrap5-extras
+      - name: Check out the demo
+        uses: actions/checkout@v7
+        with:
+          repository: gwtbootstrap5/gwtbootstrap5.github.io
+          ref: ${{ github.repository == 'gwtbootstrap5/gwtbootstrap5.github.io' && github.sha || 'master' }}
+          path: parent/gwtbootstrap5-demo
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      # The OWASP dependency check runs weekly and on releases, not on every push
+      - name: Build and test
+        working-directory: parent
+        run: mvn -B -ntp install -P test -Ddependency-check.skip=true
+
+      - name: Check every page of the demo
+        working-directory: parent/gwtbootstrap5-demo
+        run: |
+          SITE=$(ls -d target/gwtbootstrap5-demo-*/)
+          python3 -m http.server 8000 -d "$SITE" > /dev/null 2>&1 &
+          SERVER=$!
+          trap 'kill $SERVER' EXIT
+          python3 src/test/browser/check.py http://localhost:8000
+
+      - name: Test reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-reports
+          path: parent/**/target/surefire-reports/
+          if-no-files-found: ignore
+
+      - name: Collect the site
+        if: inputs.pages
+        run: |
+          mkdir _site
+          cp -r parent/gwtbootstrap5-demo/target/gwtbootstrap5-demo-*/. _site/
+          rm -rf _site/WEB-INF _site/META-INF
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v5
+        if: inputs.pages
+        with:
+          path: _site
