@@ -1,0 +1,136 @@
+name: Release
+
+# A vX.Y.Z tag, pushed by release.sh, publishes that version to Maven Central and creates
+# the GitHub releases of the four repositories.
+# Run by hand, it rehearses a release of the given version from master: it uploads and
+# validates the deployment, then drops it in the Central Portal without publishing.
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to rehearse (for example 0.2.1-rc1); nothing is published
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+
+defaults:
+  run:
+    # With an explicit shell, a step fails when any command of a pipe fails
+    shell: bash
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      REHEARSAL: ${{ github.event_name == 'workflow_dispatch' }}
+      VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Check the version
+        run: |
+          VERSION=${VERSION#v}
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          if [ "$REHEARSAL" = true ]; then
+            case "$VERSION" in *-SNAPSHOT) echo "::error::Central does not take snapshots"; exit 1 ;; esac
+            mvn -B -ntp -q org.codehaus.mojo:versions-maven-plugin:2.22.0:set \
+              -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DprocessAllModules=true
+          else
+            # The submodules must be at the commits tagged with the same version
+            git submodule foreach -q 'git fetch -q --tags origin && git tag --points-at HEAD | grep -qx "v$VERSION" \
+              || { echo "::error::$sm_path is not at tag v$VERSION"; exit 1; }'
+          fi
+          POM_VERSION=$(mvn -B -ntp -q help:evaluate -Dexpression=project.version -DforceStdout)
+          [ "$POM_VERSION" = "$VERSION" ] || { echo "::error::the poms say $POM_VERSION, not $VERSION"; exit 1; }
+
+      - name: Maven settings
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
+        run: |
+          # The values stay as ${env.*} references and Maven reads them when the deploy step runs
+          cat > ~/.m2/settings.xml <<'EOF'
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${env.CENTRAL_USERNAME}</username>
+                <password>${env.CENTRAL_PASSWORD}</password>
+              </server>
+              <server>
+                <id>ossindex</id>
+                <username>${env.OSSINDEX_USERNAME}</username>
+                <password>${env.OSSINDEX_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Build, test, sign and upload
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+          # Read by the Bouncy Castle signer, which needs neither gpg nor its agent
+          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        run: |
+          ARGS=(-Dgpg.signer=bc -Dossindex.serverId=ossindex)
+          if [ "$REHEARSAL" = true ]; then
+            ARGS+=(-Dcentral.autoPublish=false -Dcentral.waitUntil=validated)
+          fi
+          mvn -B -ntp -P release,test deploy "${ARGS[@]}" | tee "$RUNNER_TEMP/deploy.log"
+
+      - name: Drop the rehearsal deployment
+        if: always() && env.REHEARSAL == 'true'
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+        run: |
+          ID=$(grep -oP 'deploymentId: \K[0-9a-f-]+' "$RUNNER_TEMP/deploy.log" | head -1 || true)
+          if [ -z "$ID" ]; then echo "Nothing was uploaded"; exit 0; fi
+          curl -sSf -X DELETE -H "Authorization: Bearer $(printf '%s:%s' "$CENTRAL_USERNAME" "$CENTRAL_PASSWORD" | base64 -w0)" \
+            "https://central.sonatype.com/api/v1/publisher/deployment/$ID"
+          echo "Dropped deployment $ID"
+
+      - name: GitHub releases
+        if: env.REHEARSAL == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          # This version's section of CHANGELOG.md, one heading level up
+          awk -v h="## $VERSION " 'index($0, h) == 1 {p=1; next} /^## / {p=0} p' CHANGELOG.md \
+            | sed 's/^### /## /' > "$RUNNER_TEMP/notes.md"
+          [ -s "$RUNNER_TEMP/notes.md" ] || { echo "::error::CHANGELOG.md has no $VERSION section"; exit 1; }
+          TAG="v$VERSION"
+          PARENT_URL="https://github.com/gwtbootstrap5/gwtbootstrap5-parent/releases/tag/$TAG"
+          gh release create "$TAG" -R gwtbootstrap5/gwtbootstrap5-parent --verify-tag \
+            --title "GwtBootstrap5 $VERSION" --notes-file "$RUNNER_TEMP/notes.md"
+          for entry in \
+              "gwtbootstrap5|the core module, on Maven Central as \`io.github.gwtbootstrap5:gwtbootstrap5:$VERSION\`" \
+              "gwtbootstrap5-extras|the extras module, on Maven Central as \`io.github.gwtbootstrap5:gwtbootstrap5-extras:$VERSION\`" \
+              "gwtbootstrap5.github.io|the source of the [demo](https://gwtbootstrap5.github.io/)"; do
+            gh release create "$TAG" -R "gwtbootstrap5/${entry%%|*}" --verify-tag --title "GwtBootstrap5 $VERSION" \
+              --notes "GwtBootstrap5 $VERSION: ${entry#*|}.
+
+          The release notes are in the [parent's release]($PARENT_URL). Every widget is running in the [demo](https://gwtbootstrap5.github.io/)."
+          done
