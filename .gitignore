@@ -8,3 +8,4 @@ target/
 .settings/
 out/
 *.versionsBackup
+RELEASING.md

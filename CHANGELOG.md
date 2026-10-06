@@ -1,4 +1,6 @@
-# GwtBootstrap5 0.2.0
+# Changelog
+
+## 0.2.0 (2026-10-06)
 
 Bootstrap 5.3.8 for GWT, now on Maven Central as `io.github.gwtbootstrap5`.
 
@@ -17,7 +19,7 @@ Bootstrap 5.3.8 for GWT, now on Maven Central as `io.github.gwtbootstrap5`.
 </dependency>
 ```
 
-## Highlights
+### Highlights
 
 - **JsInterop instead of JSNI**, and **no jQuery in the core module**. Popper is loaded by core; the extras that still need jQuery load it themselves.
 - **New components:** Offcanvas, Accordion items, Switch, FloatingLabel, Placeholder, InputColor, Ratio, HStack / VStack, VerticalRule, NavUnderline and CardGroup.
@@ -26,11 +28,11 @@ Bootstrap 5.3.8 for GWT, now on Maven Central as `io.github.gwtbootstrap5`.
 - **Many fixes** to markup that was still Bootstrap 3 or 4: breadcrumbs, pagination, dropdown items, navs, popovers, carousel indicators, spinners, alerts, collapse and more. The [demo](https://gwtbootstrap5.github.io/) covers every component.
 - **Extras:** Bootbox 6, Tempus Dominus 6 and Air Datepicker 3, Tom Select 2, Summernote 0.9, bootstrap-slider 11, animate.css 4 and Font Awesome 7. `Select` now works without a subclass.
 
-## Upgrading from 0.1.x
+### Upgrading from 0.1.x
 
 The groupId, the jQuery wrapper and several Bootstrap 3/4 widgets and constants changed. [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md) lists every breaking change with the code to update.
 
-## Links
+### Links
 
 - [Demo](https://gwtbootstrap5.github.io/) and [getting started](https://gwtbootstrap5.github.io/#setup)
 - Javadoc: [core](https://javadoc.io/doc/io.github.gwtbootstrap5/gwtbootstrap5/0.2.0), [extras](https://javadoc.io/doc/io.github.gwtbootstrap5/gwtbootstrap5-extras/0.2.0)
