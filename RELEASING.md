@@ -58,5 +58,5 @@ The steps use `0.2.0` as the example.
    git push git@github.com:gwtbootstrap5/gwtbootstrap5-parent.git v0.2.0
    ```
 
-6. **GitHub releases.** In each repository, create a release from the `v0.2.0` tag. The parent's release carries the notes, which summarize `UPGRADING.md` and link to it. The others link to the parent's.
+6. **GitHub releases.** In each repository, create a release from the `v0.2.0` tag. The parent's release carries the notes: paste `release-notes/v0.2.0.md`, which summarizes `UPGRADING.md` and links to the demo, the Javadoc and Maven Central. The others link to the parent's release and to the [demo](https://gwtbootstrap5.github.io/).
 7. **Next version.** Bump the three poms to the next development version (for example `0.2.1-SNAPSHOT`) and commit.
