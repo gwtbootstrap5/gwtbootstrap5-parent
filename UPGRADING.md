@@ -543,6 +543,7 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - `CheckBoxButton` and `RadioButton` toggle when their text is clicked in Chrome. Only a click on the button's padding toggled them.
 - `FontAwesomeURL` loads Font Awesome from the CDN. It loaded Bootstrap Icons, so the Font Awesome icons had no font.
 - `TomSelectURL` loads the Tom Select CSS of the same version as its script (2.5.2); it loaded the 2.2.2 CSS.
+- The icon options work with the Bootstrap Icons of core: `setSize`, `setSpin`, `setPulse`, `setRotate`, `setFlip`, `setBorder`, `setFixedWidth`, `setInverse`, `IconStack`, and the `setIcon*` options of buttons and links. They write Font Awesome classes, which only had CSS with the Font Awesome extra; core now adds that CSS for Bootstrap Icons, scoped to `.bi`, the first time an icon is created.
 - `Popover` shows its title and content: its template used Bootstrap 3's `popover-title` / `popover-content`.
 - `Tooltip.setTitle`, `Popover.setTitle` and `Popover.setContent` update a tooltip that is already initialized, at once if it is showing. Bootstrap reads them only when it creates the tooltip, so the change was ignored.
 - A tooltip or popover is removed when its widget is detached. It stayed open on the page, for example after moving to another page of an app.
@@ -561,5 +562,4 @@ summernote.addSummernoteImageUploadHandler(event -> {
 
 ## Known issues
 
-- The icon modifiers (`setSize`, `setSpin`, `setPulse`, `setRotate`, `setFlip`, `setBorder`, `setFixedWidth`, `setInverse`, `IconStack`, and the `setIcon*` options of buttons and links) write Font Awesome classes. They only work with the Font Awesome extra; with the Bootstrap Icons of core they have no effect. Size and color Bootstrap Icons like text instead, for example with `fs-*` and `text-*` classes.
 - `Bootbox.init(SimpleCallback)` never calls its callback. In Bootbox 6, `bootbox.init(...)` reinitialises Bootbox instead of registering a callback. This was already the case in 0.1.x.
