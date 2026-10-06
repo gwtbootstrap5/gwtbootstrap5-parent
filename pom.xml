@@ -12,10 +12,6 @@
     <description>GWT wrapper for the Bootstrap front-end framework</description>
     <url>https://github.com/gwtbootstrap5/gwtbootstrap5-parent</url>
 
-    <prerequisites>
-        <maven>3.9.16</maven>
-    </prerequisites>
-
     <scm>
         <connection>scm:git:git@github.com:gwtbootstrap5/gwtbootstrap5-parent.git</connection>
         <developerConnection>scm:git:git@github.com:gwtbootstrap5/gwtbootstrap5-parent.git</developerConnection>
@@ -83,8 +79,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -101,7 +96,14 @@
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+        <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+        <maven-install-plugin.version>3.2.0</maven-install-plugin.version>
+        <maven-deploy-plugin.version>3.2.0</maven-deploy-plugin.version>
         <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+        <!-- Set in settings.xml by those who have an OSS Index token -->
+        <ossindex.serverId></ossindex.serverId>
+
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
     </properties>
 
@@ -174,11 +176,9 @@
                             <suppressionFile>${basedir}/src/main/resources/cve-false-possitives.xml</suppressionFile>
                         </suppressionFiles>
                         <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-                        <nvdDatafeedUrl>${env.NVD_API_URL}</nvdDatafeedUrl>
-                        <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
-                        <ossindexAnalyzerEnabled>${env.OSS_INDEX_ENABLED}</ossindexAnalyzerEnabled>
-                        <ossIndexUsername>${env.OSSINDEX_USERNAME}</ossIndexUsername>
-                        <ossIndexPassword>${env.OSSINDEX_PASSWORD}</ossIndexPassword>
+                        <nvdApiKeyEnvironmentVariable>NVD_API_KEY</nvdApiKeyEnvironmentVariable>
+                        <!-- Sonatype Guide credentials for OSS Index: a settings.xml server named by ossindex.serverId -->
+                        <ossIndexServerId>${ossindex.serverId}</ossIndexServerId>
                     </configuration>
                     <executions>
                         <execution>
@@ -206,17 +206,55 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
+                <!-- The gwt-lib and war lifecycles leave these unversioned, and Maven would try the Maven 4 betas first -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.9,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${java.version},)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -231,6 +269,8 @@
                     <processStartTag> ==========================LICENSE_START=============================== </processStartTag>
                     <sectionDelimiter> ====================================================================== </sectionDelimiter>
                     <processEndTag> ==========================LICENSE_END================================= </processEndTag>
+                    <!-- The parent itself has no sources -->
+                    <ignoreNoFileToScan>true</ignoreNoFileToScan>
                     <includes>
                         <include>**/*.java</include>
                         <include>**/*.xml</include>
@@ -293,6 +333,8 @@
                             <linksource>true</linksource>
                             <validateLinks>true</validateLinks>
                             <noqualifier>all</noqualifier>
+                            <!-- Most of the API has no comments yet; still check broken references and HTML -->
+                            <doclint>all,-missing</doclint>
                             <links>
                                 <link>https://www.gwtproject.org/javadoc/latest</link>
                             </links>
@@ -326,6 +368,8 @@
                             <linksource>true</linksource>
                             <validateLinks>true</validateLinks>
                             <noqualifier>all</noqualifier>
+                            <!-- Most of the API has no comments yet; still check broken references and HTML -->
+                            <doclint>all,-missing</doclint>
                             <links>
                                 <link>https://www.gwtproject.org/javadoc/latest</link>
                             </links>
