@@ -6,6 +6,19 @@
 
 - Extras: `DialogOptions` and the alert, confirm and prompt options take `setOnShow`, `setOnShown`, `setOnHide` and `setOnHidden`, which run when that dialog shows or hides.
 
+### Updated libraries
+
+| Library | Before | Now |
+| --- | --- | --- |
+| Tom Select | 2.5.2 | 2.6.2 |
+| Font Awesome Free | 7.0.1 | 7.3.1: 17 new icons in `IconTypeFASolid` / `IconTypeFARegular` and 60 in `IconTypeFABrands`, none removed |
+| Air Datepicker | 3.5.3 | 3.6.0 |
+| jQuery UI | 1.14.1 | 1.14.2 |
+
+- Extras: the URL variants (`TempusDominusURL`, `AirDatepickerURL`…) load the same version as the bundled one. `TempusDominusURL` loaded 6.9.4 while 6.10.4 was bundled, and `AirDatepickerURL` loaded 3.6.0 while 3.5.3 was bundled.
+- Extras: the bundled Tom Select CSS is the one of its version; it was the CSS of an older release.
+- Extras: the bundled jQuery UI is the complete build, the same as `JQueryUIURL` loads, with the theme's icon images, which were missing.
+
 ### Fixes
 
 - Extras: `Bootbox.init(SimpleCallback)` never called its callback. It now runs every time a Bootbox dialog is shown; calling it again replaces the callback, and `null` removes it.
