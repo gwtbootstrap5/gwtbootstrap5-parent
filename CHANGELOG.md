@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.3.1 (2026-10-07)
+
 ### Features
 
 - `StickyHelper` and `StickyPosition`: Bootstrap 5.3's sticky positions, `sticky-top`, `sticky-bottom` and their breakpoint variants (`sticky-md-top`…), with an optional offset from the edge, and `removeSticky` to undo them. In UiBinder, `<b.html:Div sticky="TOP">`. The demo has a Sticky page.
