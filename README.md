@@ -7,7 +7,7 @@ Add GWTBootstrap5 to your project as a Maven dependency from Maven Central.
 <dependency>
   <groupId>io.github.gwtbootstrap5</groupId>
   <artifactId>gwtbootstrap5</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
@@ -18,6 +18,8 @@ Add GWTBootstrap5 to your project as a Maven dependency from Maven Central.
 * Extract datepicker and select engines to separate jar
 
 ### Final Release
+* 0.3.1 - Released on 7 October 2026.
+  * Based on Bootstrap v5.3.8. `StickyHelper` for the sticky positions (`Affix` deprecated), `Bootbox.init` fixed, bundled JavaScript libraries updated.
 * 0.3.0 - Released on 7 October 2026.
   * Based on Bootstrap v5.3.8. Deprecated APIs removed, extras destroy their JavaScript widget on unload, Javadoc for the whole public API.
 * 0.2.0 - Released on 5 October 2026.
