@@ -42,6 +42,15 @@ jobs:
           java-version: 17
           cache: maven
 
+      # The OWASP check updates the NVD database from the copy the dependency-check workflow
+      # saves. Without it, the check downloads the whole database, which can take longer than
+      # the job's timeout: the Maven cache only has a copy when the poms didn't change
+      - uses: actions/cache@v6
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: nvd-${{ github.run_id }}
+          restore-keys: nvd-
+
       - name: Check the version
         run: |
           VERSION=${VERSION#v}
