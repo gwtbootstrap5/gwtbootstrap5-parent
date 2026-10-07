@@ -629,7 +629,3 @@ summernote.addSummernoteImageUploadHandler(event -> {
 - The native `TempusDominus` type's `setLocale(String)`, which doesn't exist in Tempus Dominus 6, is replaced by `locale(String)`.
 - `RangeBase.isVisible()` no longer recurses forever when the slider isn't attached.
 - A `RangeSlider` with a formatter no longer throws a `NullPointerException`. bootstrap-slider also passes single numbers, for the separate min / max tooltips, and those become a `Range` with equal bounds.
-
-## Known issues
-
-- `Bootbox.init(SimpleCallback)` never calls its callback. In Bootbox 6, `bootbox.init(...)` reinitialises Bootbox instead of registering a callback. This was already the case in 0.1.x.

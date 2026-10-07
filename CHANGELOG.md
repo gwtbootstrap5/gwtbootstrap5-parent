@@ -2,7 +2,17 @@
 
 ## Unreleased
 
-Nothing yet.
+### Features
+
+- Extras: `DialogOptions` and the alert, confirm and prompt options take `setOnShow`, `setOnShown`, `setOnHide` and `setOnHidden`, which run when that dialog shows or hides.
+
+### Fixes
+
+- Extras: `Bootbox.init(SimpleCallback)` never called its callback. It now runs every time a Bootbox dialog is shown; calling it again replaces the callback, and `null` removes it.
+
+### Deprecated
+
+- Extras: `BootboxGlobal.init(JsSimpleCallback)`. In Bootbox 6, `bootbox.init(...)` creates a new Bootbox instead of registering a callback. Use `Bootbox.init(SimpleCallback)` or `setOnShown`.
 
 ## 0.3.0 (2026-10-07)
 
