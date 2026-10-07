@@ -1,0 +1,149 @@
+{
+  "_comment": [
+    "The JavaScript and CSS libraries that core and extras bundle, read by check-js-libraries.py.",
+    "Each reference is a file or folder and a regular expression whose group is a version: the",
+    "expression is matched against the names of the files under the path (the bundled copies) and",
+    "against the content of its .java and .gwt.xml files (the URL variants and version constants).",
+    "Every reference must match at least once, always with the library's version."
+  ],
+  "libraries": [
+    {
+      "name": "Bootstrap",
+      "npm": "bootstrap",
+      "version": "5.3.8",
+      "repo": "gwtbootstrap5",
+      "references": [
+        {"path": "gwtbootstrap5/src/main", "regex": "bootstrap[-@](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Bootstrap Icons",
+      "npm": "bootstrap-icons",
+      "version": "1.13.1",
+      "repo": "gwtbootstrap5",
+      "references": [
+        {"path": "gwtbootstrap5/src/main", "regex": "bootstrap-icons[-@](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Popper",
+      "npm": "@popperjs/core",
+      "version": "2.11.8",
+      "repo": "gwtbootstrap5",
+      "references": [
+        {"path": "gwtbootstrap5/src/main", "regex": "(?:popper-|@popperjs/core@)(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "jQuery",
+      "npm": "jquery",
+      "version": "3.7.1",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "jquery-(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "jQuery Migrate",
+      "npm": "jquery-migrate",
+      "version": "3.5.0",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "jquery-migrate-(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "jQuery UI",
+      "npm": "jquery-ui",
+      "version": "1.14.2",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "(?:jquery-ui-|jqueryui/)(\\d+\\.\\d+\\.\\d+)"},
+        {"path": "gwtbootstrap5-extras/src/main/java/org/gwtbootstrap5/extras/jqueryui/client/JQueryUIClientBundle.java", "regex": "VERSION = \"(\\d+\\.\\d+\\.\\d+)\""}
+      ]
+    },
+    {
+      "name": "Animate.css",
+      "npm": "animate.css",
+      "version": "4.1.1",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "animate(?:\\.compat)?-(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Bootbox",
+      "npm": "bootbox",
+      "version": "6.0.4",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "bootbox(?:-|\\.js/)(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Bootstrap Colorpicker",
+      "npm": "bootstrap-colorpicker",
+      "version": "3.4.0",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "bootstrap-colorpicker[-/](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Bootstrap Slider",
+      "npm": "bootstrap-slider",
+      "version": "11.0.2",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "bootstrap-slider[-/](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Air Datepicker",
+      "npm": "air-datepicker",
+      "version": "3.6.0",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "air-datepicker[-@](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Tempus Dominus",
+      "npm": "@eonasdan/tempus-dominus",
+      "version": "6.10.4",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "tempus-dominus[-@](\\d+\\.\\d+\\.\\d+)"}
+      ]
+    },
+    {
+      "name": "Tom Select",
+      "npm": "tom-select",
+      "version": "2.6.2",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "tom-select[-@](\\d+\\.\\d+\\.\\d+)"},
+        {"path": "gwtbootstrap5-extras/src/main/java/org/gwtbootstrap5/extras/select/client/ui/engines/tomselect/TomSelectClientBundle.java", "regex": "VERSION = \"(\\d+\\.\\d+\\.\\d+)\""}
+      ]
+    },
+    {
+      "name": "Summernote",
+      "npm": "summernote",
+      "version": "0.9.1",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "(?:summernote-bs5-|summernote/|locale\\.cache\\.)(\\d+\\.\\d+\\.\\d+)"},
+        {"path": "gwtbootstrap5-extras/src/main/java/org/gwtbootstrap5/extras/summernote/client/SummernoteClientBundle.java", "regex": "VERSION = \"(\\d+\\.\\d+\\.\\d+)\""}
+      ]
+    },
+    {
+      "name": "Font Awesome Free",
+      "npm": "@fortawesome/fontawesome-free",
+      "version": "7.3.1",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "(?:font-awesome-|fontawesome-free@)(\\d+\\.\\d+\\.\\d+)"}
+      ]
+    }
+  ]
+}

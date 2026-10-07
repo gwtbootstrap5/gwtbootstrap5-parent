@@ -50,6 +50,12 @@ jobs:
           ref: ${{ github.repository == 'gwtbootstrap5/gwtbootstrap5.github.io' && github.sha || 'master' }}
           path: parent/gwtbootstrap5-demo
 
+      # The bundled copy of each JavaScript library, its URL variant and its version constants
+      # must all name the version in js-libraries.json
+      - name: Bundled JavaScript libraries
+        working-directory: parent
+        run: python3 check-js-libraries.py
+
       - uses: actions/setup-java@v6
         with:
           distribution: temurin

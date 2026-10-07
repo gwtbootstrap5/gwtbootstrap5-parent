@@ -17,6 +17,7 @@
 
 - Extras: the URL variants (`TempusDominusURL`, `AirDatepickerURL`…) load the same version as the bundled one. `TempusDominusURL` loaded 6.9.4 while 6.10.4 was bundled, and `AirDatepickerURL` loaded 3.6.0 while 3.5.3 was bundled.
 - Extras: the bundled Tom Select CSS is the one of its version; it was the CSS of an older release.
+- Extras: the `animate.compat` CSS bundled with Animate.css is the one of 4.1.1, like the rest; it was the one of 4.0.0.
 - Extras: the bundled jQuery UI is the complete build, the same as `JQueryUIURL` loads, with the theme's icon images, which were missing.
 
 ### Fixes

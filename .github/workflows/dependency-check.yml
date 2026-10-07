@@ -2,7 +2,8 @@ name: Dependency check
 
 # The OWASP dependency check of core and extras, against the master of every repository.
 # It downloads the NVD database, so it runs weekly and in the release workflow rather than
-# on every push.
+# on every push. The same day, the bundled JavaScript libraries are compared with their latest
+# npm release, and each one behind gets an issue in its repository.
 on:
   schedule:
     - cron: '0 6 * * 1'
@@ -68,3 +69,20 @@ jobs:
           name: dependency-check-reports
           path: '*/target/dependency-check-report.html'
           if-no-files-found: ignore
+
+  js-libraries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Submodules at their master
+        run: git submodule update --remote
+
+      # The issues go to core and extras, which the workflow's own token can't reach
+      - name: Libraries behind npm
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: python3 check-js-libraries.py --latest --issues
