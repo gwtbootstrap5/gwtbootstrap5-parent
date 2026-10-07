@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.3.0 (2026-10-07)
+
 ### Breaking changes
 
 The APIs deprecated in 0.2.x are removed. [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#upgrading-to-030) has the replacement for each one.
