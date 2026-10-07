@@ -4,6 +4,7 @@
 
 ### Features
 
+- `StickyHelper` and `StickyPosition`: Bootstrap 5.3's sticky positions, `sticky-top`, `sticky-bottom` and their breakpoint variants (`sticky-md-top`…), with an optional offset from the edge, and `removeSticky` to undo them. In UiBinder, `<b.html:Div sticky="TOP">`. The demo has a Sticky page.
 - Extras: `DialogOptions` and the alert, confirm and prompt options take `setOnShow`, `setOnShown`, `setOnHide` and `setOnHidden`, which run when that dialog shows or hides.
 
 ### Updated libraries
@@ -26,6 +27,7 @@
 
 ### Deprecated
 
+- `Affix`, replaced by `StickyHelper`; it will be removed in 0.4.0. It gains `unaffix`, and its javadoc says that its default offset is 10 pixels.
 - Extras: `BootboxGlobal.init(JsSimpleCallback)`. In Bootbox 6, `bootbox.init(...)` creates a new Bootbox instead of registering a callback. Use `Bootbox.init(SimpleCallback)` or `setOnShown`.
 
 ## 0.3.0 (2026-10-07)

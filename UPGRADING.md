@@ -202,6 +202,8 @@ Bootstrap 5 removed the affix plugin, so `Affix` didn't work on 0.1.x: it called
 - The offset is the distance in pixels **from the top of the viewport** at which the element sticks. In Bootstrap 3's affix it was the number of pixels scrolled before the element was pinned.
 - A sticky element sticks within its parent, so the parent must be taller than the element.
 
+`Affix` is deprecated in 0.3.1 and will be removed in 0.4.0. `StickyHelper` replaces it, and it also sticks to the bottom and from a breakpoint up: `Affix.affix(widget)` is `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`, and `Affix.unaffix(widget)` is `StickyHelper.removeSticky(widget)`. In UiBinder, a `Div` takes `sticky="TOP"`.
+
 ### InputRange and InputFile use Bootstrap 5 classes
 
 `InputRange` used the Bootstrap 4 classes `form-control form-control-range`, so it rendered as an unstyled slider inside a text-field border. It now has only Bootstrap 5's `form-range` class.
