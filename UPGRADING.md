@@ -1,6 +1,6 @@
 # Upgrading to 0.4.0
 
-GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1. Each one has a replacement that does the same:
+GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1, and `setViewportSelector`, which wrote the wrong Bootstrap 5 option. Each one has a replacement:
 
 | You use | Use instead |
 | --- | --- |
@@ -8,6 +8,7 @@ GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1. Each one has
 | `Affix.affix(widget, offset)` | `StickyHelper.setSticky(widget, StickyPosition.TOP, offset)` |
 | `Affix.unaffix(widget)` | `StickyHelper.removeSticky(widget)` |
 | `BootboxGlobal.init(JsSimpleCallback)` | `Bootbox.init(SimpleCallback)`, which runs the callback every time a dialog is shown, or `setOnShown` on the dialog's options. `bootbox.init(...)` never called the callback |
+| `Tooltip.setViewportSelector` / `Popover.setViewportSelector` (and the getters) | `setSelector`, if you meant tips on descendants added later; otherwise delete the call. `viewport` was a Bootstrap 3 option, and the setter wrote `data-bs-selector`, overriding the selector |
 
 In UiBinder, a `Div` takes the sticky position as an attribute: `<b.html:Div sticky="TOP">`.
 

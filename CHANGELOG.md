@@ -8,7 +8,28 @@ The APIs deprecated in 0.3.1 are removed. [UPGRADING.md](https://github.com/gwtb
 
 - `Affix`: use `StickyHelper` and `StickyPosition`. `Affix.affix(widget)` is `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`.
 - Extras: `BootboxGlobal.init(JsSimpleCallback)`: use `Bootbox.init(SimpleCallback)` or `setOnShown`.
+- `Tooltip` / `Popover`: `setViewportSelector` and `getViewportSelector` are removed. `viewport` was a Bootstrap 3 option, and the setter wrote `data-bs-selector`, which overrode the `selector` option of the tip. Use `setSelector` for tips on descendants added later.
 - Extras: jQuery 4.0.0 instead of 3.7.1, and jQuery Migrate (4.0.2) is only loaded by Summernote and ColorPicker, which need it with jQuery 4. Code of your own that relied on the Migrate the extras loaded may need it in the host page; see [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#jquery-4).
+
+### Features
+
+Bootstrap 5.3 classes and options that had no API, from an audit against Bootstrap 5.3.8:
+
+- Grid: `ColumnOffset.XXL_5`, which was missing; `ColumnSize.XS_AUTO` … `XXL_AUTO` (`col-auto`, `col-md-auto`…) and `RowColSize.XS_AUTO` … `XXL_AUTO` (`row-cols-auto`…).
+- Gutters: `Row.setGutter`, `setGutterX` and `setGutterY` with `Gutter`, `GutterX` and `GutterY` (`g-*`, `gx-*`, `gy-*`, one per breakpoint). In UiBinder, `<b:Row gutter="XS_2 MD_4">`.
+- `TableResponsive`: a wrapper that scrolls a wide table, at every width or below a `TableResponsiveBreakpoint`.
+- `ProgressStacked`: several `Progress` in one bar, each with `Progress.setPercent`.
+- `Tooltip` / `Popover`: `setOffset`, `setFallbackPlacements`, `setBoundary`, `setCustomClass`, `setSanitize` and `setAllowList`. Turning the sanitizer off lets HTML in the title run: only do it for trusted content.
+- Dropdowns (`DropDown`, `ListDropDown`, `NavbarDropdown`): `setOffset`, `setBoundary`, `setReference` (`DropDownReference`) and `setDisplay` (`DropDownDisplay`).
+- `ScrollSpy`: `setRootMargin`, `setSmoothScroll` and `setThreshold`.
+- `Carousel.setKeyboard` and `setTouch`; `Modal.setDataFocus`.
+- `ListBox.setSize` (`form-select-lg` / `-sm`) and `FormLabel.setSize` (`col-form-label-lg` / `-sm`).
+- Validation: `HelpBlock.setValidText` shows a success message (`valid-feedback`) and marks the control as valid when it passes; `setFeedbackTooltip(true)` shows the messages as tooltips (`invalid-tooltip` / `valid-tooltip`).
+- `DropDownItemText`: plain text in a dropdown menu (`dropdown-item-text`).
+- `CardHeader`: a `NavTabs` or `NavPills` added to it gets `card-header-tabs` or `card-header-pills`.
+- `NavbarNav.setScroll` (`navbar-nav-scroll`) and `setScrollHeight`.
+- `BlockQuoteFooter`: the source of a quote (`figcaption.blockquote-footer`).
+- `Styles`: `TABLE_GROUP_DIVIDER`, `CAPTION_TOP`, `CARD_LINK`, `DROPDOWN_TOGGLE_SPLIT`, `INITIALISM` and the other classes above.
 
 ### Updated libraries
 
