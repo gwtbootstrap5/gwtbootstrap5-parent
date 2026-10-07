@@ -8,6 +8,14 @@ The APIs deprecated in 0.3.1 are removed. [UPGRADING.md](https://github.com/gwtb
 
 - `Affix`: use `StickyHelper` and `StickyPosition`. `Affix.affix(widget)` is `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`.
 - Extras: `BootboxGlobal.init(JsSimpleCallback)`: use `Bootbox.init(SimpleCallback)` or `setOnShown`.
+- Extras: jQuery 4.0.0 instead of 3.7.1, and jQuery Migrate (4.0.2) is only loaded by Summernote and ColorPicker, which need it with jQuery 4. Code of your own that relied on the Migrate the extras loaded may need it in the host page; see [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#jquery-4).
+
+### Updated libraries
+
+| Library | Before | Now |
+| --- | --- | --- |
+| jQuery | 3.7.1 | 4.0.0 |
+| jQuery Migrate | 3.5.0 | 4.0.2, only with Summernote and ColorPicker |
 
 ## 0.3.1 (2026-10-07)
 

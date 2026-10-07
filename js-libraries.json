@@ -37,7 +37,7 @@
     {
       "name": "jQuery",
       "npm": "jquery",
-      "version": "3.7.1",
+      "version": "4.0.0",
       "repo": "gwtbootstrap5-extras",
       "references": [
         {"path": "gwtbootstrap5-extras/src/main", "regex": "jquery-(\\d+\\.\\d+\\.\\d+)"}
@@ -46,7 +46,7 @@
     {
       "name": "jQuery Migrate",
       "npm": "jquery-migrate",
-      "version": "3.5.0",
+      "version": "4.0.2",
       "repo": "gwtbootstrap5-extras",
       "references": [
         {"path": "gwtbootstrap5-extras/src/main", "regex": "jquery-migrate-(\\d+\\.\\d+\\.\\d+)"}

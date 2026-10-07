@@ -11,6 +11,16 @@ GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1. Each one has
 
 In UiBinder, a `Div` takes the sticky position as an attribute: `<b.html:Div sticky="TOP">`.
 
+### jQuery 4
+
+The extras that need jQuery (Bootbox, Summernote, ColorPicker, jQuery UI) load jQuery 4.0.0 instead of 3.7.1, bundled or from the jQuery CDN in the `*URL` modules, and only when jQuery isn't already on the page, as before.
+
+jQuery Migrate is now loaded only by the two extras that need it with jQuery 4, Summernote and ColorPicker: their libraries call `jQuery.now()` and `jQuery.isFunction()`, which jQuery 4 removed. Bootbox and jQuery UI work without it.
+
+- **Your host page loads jQuery 3:** nothing changes. The extras use it, and Migrate isn't loaded, because those libraries work with jQuery 3 without it.
+- **Your host page loads jQuery 4:** Summernote and ColorPicker load jQuery Migrate 4.0.2 themselves when it isn't there. If you load Migrate yourself, load version 4.
+- **Your own code used an API that jQuery 4 removed** (`$.trim`, `$.isArray`, `$.now`…) and relied on the Migrate that the extras loaded: it is only there now if you use Summernote or ColorPicker. Load jQuery Migrate 4 in your host page, or move to the replacements in the [jQuery 4 upgrade guide](https://jquery.com/upgrade-guide/4.0/).
+
 Update the dependency to `0.4.0`:
 
 ```xml
