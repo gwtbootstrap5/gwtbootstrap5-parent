@@ -1,3 +1,26 @@
+# Upgrading to 0.4.0
+
+GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1. Each one has a replacement that does the same:
+
+| You use | Use instead |
+| --- | --- |
+| `Affix.affix(widget)` / `Affix.affix(element)` | `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`; `Affix` stuck 10 pixels from the top by default |
+| `Affix.affix(widget, offset)` | `StickyHelper.setSticky(widget, StickyPosition.TOP, offset)` |
+| `Affix.unaffix(widget)` | `StickyHelper.removeSticky(widget)` |
+| `BootboxGlobal.init(JsSimpleCallback)` | `Bootbox.init(SimpleCallback)`, which runs the callback every time a dialog is shown, or `setOnShown` on the dialog's options. `bootbox.init(...)` never called the callback |
+
+In UiBinder, a `Div` takes the sticky position as an attribute: `<b.html:Div sticky="TOP">`.
+
+Update the dependency to `0.4.0`:
+
+```xml
+<dependency>
+  <groupId>io.github.gwtbootstrap5</groupId>
+  <artifactId>gwtbootstrap5</artifactId>
+  <version>0.4.0</version>
+</dependency>
+```
+
 # Upgrading to 0.3.0
 
 GWTBootstrap5 0.3.0 removes the APIs that were deprecated in 0.2.x. None of them did anything the remaining API can't do, so each one has a one-line replacement:

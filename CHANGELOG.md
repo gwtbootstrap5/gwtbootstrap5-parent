@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-Nothing yet.
+### Breaking changes
+
+The APIs deprecated in 0.3.1 are removed. [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#upgrading-to-040) has the replacement for each one.
+
+- `Affix`: use `StickyHelper` and `StickyPosition`. `Affix.affix(widget)` is `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`.
+- Extras: `BootboxGlobal.init(JsSimpleCallback)`: use `Bootbox.init(SimpleCallback)` or `setOnShown`.
 
 ## 0.3.1 (2026-10-07)
 
