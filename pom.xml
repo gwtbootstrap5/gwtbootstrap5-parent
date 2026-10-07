@@ -378,8 +378,11 @@
                             <doclint>all</doclint>
                             <additionalOptions>
                                 <additionalOption>-Xdoclint/package:${javadoc.documented.packages}</additionalOption>
-                                <!-- Report every gap, not only the first hundred -->
-                                <additionalOption>-Xmaxwarns 100000</additionalOption>
+                                <!--
+                                    More than the default hundred gaps, but fewer than a thousand: with that
+                                    many warnings the plugin reports none and the check passes
+                                -->
+                                <additionalOption>-Xmaxwarns 500</additionalOption>
                             </additionalOptions>
                             <failOnWarnings>true</failOnWarnings>
                             <links>

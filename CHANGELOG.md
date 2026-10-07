@@ -13,6 +13,14 @@ The APIs deprecated in 0.2.x are removed. [UPGRADING.md](https://github.com/gwtb
 ### Fixes
 
 - Extras: `Select`, `MultipleSelect`, `DatePicker`, `TimePicker` and `DateTimePicker` destroy their JavaScript widget when they are removed from the page, and create it again when they are added back, keeping the selected value or date. Tempus Dominus pickers used to leave their widget in `<body>` every time their page was shown again.
+- `Icon`'s option getters (`isSpin()`, `isBorder()`…) and `UnorderedList.isUnstyled()` / `isInline()` returned `false` as soon as the widget had any other class.
+- `RoleHelper.hasRole` returned `true` for elements without a `role`.
+- `OrderedList.setInline(false)` didn't remove `list-inline`.
+- Extras: `SummernoteLanguage.GL_ES`, `LT_LV` and `SR_RS_LATIN` left the editor in English: their codes weren't the ones their translation files register.
+
+### Documentation
+
+- Javadoc for the whole public API of core and extras, with links to the Bootstrap 5.3 pages and UiBinder examples. CI fails if a documented package gets a gap again.
 
 ## 0.2.0 (2026-10-06)
 
