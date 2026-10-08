@@ -10,9 +10,16 @@ The APIs deprecated in 0.3.1 are removed. [UPGRADING.md](https://github.com/gwtb
 - Extras: `BootboxGlobal.init(JsSimpleCallback)`: use `Bootbox.init(SimpleCallback)` or `setOnShown`.
 - `Tooltip` / `Popover`: `setViewportSelector` and `getViewportSelector` are removed. `viewport` was a Bootstrap 3 option, and the setter wrote `data-bs-selector`, which overrode the `selector` option of the tip. Use `setSelector` for tips on descendants added later.
 - Extras: each date picker engine is its own GWT module, and only the inherited ones are compiled. The engine comes with `TempusDominusResources` / `TempusDominusURL` or `AirDatepickerResources` / `AirDatepickerURL`, the modules that already loaded its script, so apps that inherit them don't change; apps that inherit only `DateTimePicker` get an error that names the module to inherit. See [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#date-picker-engines).
+- Extras: each select engine is its own GWT module, the same way: `TomSelectResources` / `TomSelectURL` bring Tom Select, so apps that inherit them don't change. See [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#select-engines).
+- Extras: a search in a `Select` or `MultipleSelect` filters its options unless `setAsyncLoad(true)` is set; selects that override `asyncDataLoad` need it. Before, every search called `asyncDataLoad` (see Fixes).
+- Extras: `ISelectEngine` has a new method, `getControlElement()`.
 - Extras: jQuery 4.0.0 instead of 3.7.1, and jQuery Migrate (4.0.2) is only loaded by Summernote and ColorPicker, which need it with jQuery 4. Code of your own that relied on the Migrate the extras loaded may need it in the host page; see [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#jquery-4).
 
 ### Features
+
+- Extras: [Choices.js](https://choices-js.github.io/Choices/) 11 and [Slim Select](https://slimselectjs.com/) 4 draw `Select` and `MultipleSelect`, besides Tom Select: `engine="CHOICESJS"` or `"SLIMSELECT"`, with the `ChoicesResources` / `ChoicesURL` or `SlimSelectResources` / `SlimSelectURL` module. A small style sheet gives each one the Bootstrap look, also in the dark color mode. The demo's Select page shows every example with the three, with buttons to switch.
+- Extras: `Select` and `MultipleSelect` work without `engine` when a single engine is inherited, and take it with `setEngine` too. `SelectEngine.register`, `isRegistered` and `getRegisteredEngines` are the registry the engine modules use.
+- Extras: `setAsyncLoad` and `setLoadOnOpen` load the options from `asyncDataLoad` (remote search), and `setNoResultsText` sets the text of a search without results. With Tom Select, `searchPlaceholder` now shows: the search box moves into the dropdown, as with the other two.
 
 - Extras: an app with one date picker engine compiles without the other. A test app with only Air Datepicker goes from 345 KB of JavaScript to 270 KB (79 KB gzipped instead of 88).
 - Extras: `DatePicker`, `DateTimePicker` and `TimePicker` work without `engine` (`<dp:DatePicker/>`, `new DatePicker()`) when a single engine is inherited, and take it with `setEngine` too. `DateTimePickerEngines.register`, `isRegistered` and `getRegisteredEngines` are the registry the engine modules use.
@@ -35,12 +42,20 @@ Bootstrap 5.3 classes and options that had no API, from an audit against Bootstr
 - `BlockQuoteFooter`: the source of a quote (`figcaption.blockquote-footer`).
 - `Styles`: `TABLE_GROUP_DIVIDER`, `CAPTION_TOP`, `CARD_LINK`, `DROPDOWN_TOGGLE_SPLIT`, `INITIALISM` and the other classes above.
 
+### Fixes
+
+- Extras: typing in the search box of a Tom Select `Select` emptied it, unless `asyncDataLoad` was overridden: the default one finds nothing, and its answer replaced the options.
+- Extras: `setVisible` on an attached `Select` hid the whole parent of the `<select>`, usually its form group with the label, and `setFocus`, `setTabIndex` and `setAccessKey` went to the first element of that parent. They now apply to the select's control.
+- Extras: Tom Select showed `noResultsText` as HTML; it is text now, as with the other engines.
+
 ### Updated libraries
 
 | Library | Before | Now |
 | --- | --- | --- |
 | jQuery | 3.7.1 | 4.0.0 |
 | jQuery Migrate | 3.5.0 | 4.0.2, only with Summernote and ColorPicker |
+| Choices.js | — | 11.2.4, new |
+| Slim Select | — | 4.5.0, new |
 
 ## 0.3.1 (2026-10-07)
 

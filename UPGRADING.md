@@ -1,6 +1,6 @@
 # Upgrading to 0.4.0
 
-GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1, and `setViewportSelector`, which wrote the wrong Bootstrap 5 option, moves the extras to jQuery 4 and splits the date picker engines into their own modules ([below](#date-picker-engines)). Each removed API has a replacement:
+GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1, and `setViewportSelector`, which wrote the wrong Bootstrap 5 option, moves the extras to jQuery 4 and splits the date picker and select engines into their own modules ([date pickers](#date-picker-engines), [selects](#select-engines)). Each removed API has a replacement:
 
 | You use | Use instead |
 | --- | --- |
@@ -35,6 +35,22 @@ Each date picker engine is now its own GWT module, and only the engines you inhe
 - **Your module declares its `<entry-point>` before the `<inherits>` of the engine:** move it after them. The engine registers itself from the entry point of its module, and GWT runs the entry points in the order of the module file.
 - **You use a single engine:** `engine` is now optional. `<dp:DatePicker/>`, `new DatePicker()` and the same for `DateTimePicker` and `TimePicker` use the only engine inherited; with more than one, they need `engine`.
 - **You subclass `DateTimePickerBase`:** `dateTimePickerEngine` is no longer `final`, and it is `null` until the engine is chosen.
+
+### Select engines
+
+`Select` and `MultipleSelect` get the same split, and two new engines, Choices.js and Slim Select. Only the engines you inherit are compiled, and each comes with the module that loads its script, so if your `.gwt.xml` inherits `TomSelectResources` or `TomSelectURL`, as the documentation and the demo said, nothing changes:
+
+| Engine | Inherit | Or, from a CDN |
+| --- | --- | --- |
+| `TOMSELECT` | `org.gwtbootstrap5.extras.select.client.TomSelectResources` | `...client.TomSelectURL` |
+| `CHOICESJS` | `org.gwtbootstrap5.extras.select.client.ChoicesResources` | `...client.ChoicesURL` |
+| `SLIMSELECT` | `org.gwtbootstrap5.extras.select.client.SlimSelectResources` | `...client.SlimSelectURL` |
+
+- **You inherit only `Select`, and load Tom Select some other way:** inherit `TomSelectURL` instead, or `TomSelectResources` and remove your `<script>`. Otherwise the select fails with `IllegalStateException: The TOMSELECT select engine isn't loaded: inherit org.gwtbootstrap5.extras.select.client.TomSelectResources (or TomSelectURL) in your .gwt.xml`. As with the date pickers, your `<entry-point>` must come after the `<inherits>` of the engine.
+- **You use a single engine:** `engine` is now optional, `<s:Select/>` and `new Select<>()` use the only engine inherited. In Java, `setEngine` chooses one before the select is attached.
+- **You override `asyncDataLoad` to load the options from a server:** call `setAsyncLoad(true)` (`asyncLoad="true"` in UiBinder). Without it, a search now filters the options of the select. Before, every search called `asyncDataLoad`, and the default one, which finds nothing, emptied the select as soon as the user typed. `setLoadOnOpen(true)` also loads the options on the first focus.
+- **You call `setVisible` on an attached select:** it now shows and hides the select's control only. Before, it hid the whole parent of the `<select>`, often the form group with its label.
+- **You implement `ISelectEngine`:** add `getControlElement()`, the element the library shows in place of the `<select>`.
 
 Update the dependency to `0.4.0`:
 

@@ -127,6 +127,26 @@
       ]
     },
     {
+      "name": "Choices.js",
+      "npm": "choices.js",
+      "version": "11.2.4",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "choices\\.js[-@](\\d+\\.\\d+\\.\\d+)"},
+        {"path": "gwtbootstrap5-extras/src/main/java/org/gwtbootstrap5/extras/select/client/ui/engines/choicesjs/ChoicesClientBundle.java", "regex": "VERSION = \"(\\d+\\.\\d+\\.\\d+)\""}
+      ]
+    },
+    {
+      "name": "Slim Select",
+      "npm": "slim-select",
+      "version": "4.5.0",
+      "repo": "gwtbootstrap5-extras",
+      "references": [
+        {"path": "gwtbootstrap5-extras/src/main", "regex": "slim-select[-@](\\d+\\.\\d+\\.\\d+)"},
+        {"path": "gwtbootstrap5-extras/src/main/java/org/gwtbootstrap5/extras/select/client/ui/engines/slimselect/SlimSelectClientBundle.java", "regex": "VERSION = \"(\\d+\\.\\d+\\.\\d+)\""}
+      ]
+    },
+    {
       "name": "Summernote",
       "npm": "summernote",
       "version": "0.9.1",
