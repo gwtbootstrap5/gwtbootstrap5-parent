@@ -9,9 +9,13 @@ The APIs deprecated in 0.3.1 are removed. [UPGRADING.md](https://github.com/gwtb
 - `Affix`: use `StickyHelper` and `StickyPosition`. `Affix.affix(widget)` is `StickyHelper.setSticky(widget, StickyPosition.TOP, 10)`.
 - Extras: `BootboxGlobal.init(JsSimpleCallback)`: use `Bootbox.init(SimpleCallback)` or `setOnShown`.
 - `Tooltip` / `Popover`: `setViewportSelector` and `getViewportSelector` are removed. `viewport` was a Bootstrap 3 option, and the setter wrote `data-bs-selector`, which overrode the `selector` option of the tip. Use `setSelector` for tips on descendants added later.
+- Extras: each date picker engine is its own GWT module, and only the inherited ones are compiled. The engine comes with `TempusDominusResources` / `TempusDominusURL` or `AirDatepickerResources` / `AirDatepickerURL`, the modules that already loaded its script, so apps that inherit them don't change; apps that inherit only `DateTimePicker` get an error that names the module to inherit. See [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#date-picker-engines).
 - Extras: jQuery 4.0.0 instead of 3.7.1, and jQuery Migrate (4.0.2) is only loaded by Summernote and ColorPicker, which need it with jQuery 4. Code of your own that relied on the Migrate the extras loaded may need it in the host page; see [UPGRADING.md](https://github.com/gwtbootstrap5/gwtbootstrap5-parent/blob/master/UPGRADING.md#jquery-4).
 
 ### Features
+
+- Extras: an app with one date picker engine compiles without the other. A test app with only Air Datepicker goes from 345 KB of JavaScript to 270 KB (79 KB gzipped instead of 88).
+- Extras: `DatePicker`, `DateTimePicker` and `TimePicker` work without `engine` (`<dp:DatePicker/>`, `new DatePicker()`) when a single engine is inherited, and take it with `setEngine` too. `DateTimePickerEngines.register`, `isRegistered` and `getRegisteredEngines` are the registry the engine modules use.
 
 Bootstrap 5.3 classes and options that had no API, from an audit against Bootstrap 5.3.8:
 

@@ -1,6 +1,6 @@
 # Upgrading to 0.4.0
 
-GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1, and `setViewportSelector`, which wrote the wrong Bootstrap 5 option. Each one has a replacement:
+GWTBootstrap5 0.4.0 removes the APIs that were deprecated in 0.3.1, and `setViewportSelector`, which wrote the wrong Bootstrap 5 option, moves the extras to jQuery 4 and splits the date picker engines into their own modules ([below](#date-picker-engines)). Each removed API has a replacement:
 
 | You use | Use instead |
 | --- | --- |
@@ -21,6 +21,20 @@ jQuery Migrate is now loaded only by the two extras that need it with jQuery 4, 
 - **Your host page loads jQuery 3:** nothing changes. The extras use it, and Migrate isn't loaded, because those libraries work with jQuery 3 without it.
 - **Your host page loads jQuery 4:** Summernote and ColorPicker load jQuery Migrate 4.0.2 themselves when it isn't there. If you load Migrate yourself, load version 4.
 - **Your own code used an API that jQuery 4 removed** (`$.trim`, `$.isArray`, `$.now`…) and relied on the Migrate that the extras loaded: it is only there now if you use Summernote or ColorPicker. Load jQuery Migrate 4 in your host page, or move to the replacements in the [jQuery 4 upgrade guide](https://jquery.com/upgrade-guide/4.0/).
+
+### Date picker engines
+
+Each date picker engine is now its own GWT module, and only the engines you inherit are compiled: an app that uses Air Datepicker no longer carries the code and the bundled script of Tempus Dominus. The engine comes with the module that already loaded its script, so if your `.gwt.xml` inherits it, as the documentation and the demo said, nothing changes:
+
+| Engine | Inherit | Or, from a CDN |
+| --- | --- | --- |
+| `TEMPUSDOMINUS` | `org.gwtbootstrap5.extras.datetimepicker.client.TempusDominusResources` | `...client.TempusDominusURL` |
+| `AIRDATEPICKER` | `org.gwtbootstrap5.extras.datetimepicker.client.AirDatepickerResources` | `...client.AirDatepickerURL` |
+
+- **You inherit only `DateTimePicker`, and load the engine's script some other way** (a `<script>` in the host page): inherit the engine's `URL` module instead, or the `Resources` one and remove your `<script>`. Otherwise the picker fails with `IllegalStateException: The TEMPUSDOMINUS date picker engine isn't loaded: inherit org.gwtbootstrap5.extras.datetimepicker.client.TempusDominusResources (or TempusDominusURL) in your .gwt.xml`.
+- **Your module declares its `<entry-point>` before the `<inherits>` of the engine:** move it after them. The engine registers itself from the entry point of its module, and GWT runs the entry points in the order of the module file.
+- **You use a single engine:** `engine` is now optional. `<dp:DatePicker/>`, `new DatePicker()` and the same for `DateTimePicker` and `TimePicker` use the only engine inherited; with more than one, they need `engine`.
+- **You subclass `DateTimePickerBase`:** `dateTimePickerEngine` is no longer `final`, and it is `null` until the engine is chosen.
 
 Update the dependency to `0.4.0`:
 
