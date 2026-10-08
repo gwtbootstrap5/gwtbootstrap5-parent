@@ -7,17 +7,16 @@ Add GWTBootstrap5 to your project as a Maven dependency from Maven Central.
 <dependency>
   <groupId>io.github.gwtbootstrap5</groupId>
   <artifactId>gwtbootstrap5</artifactId>
-  <version>0.3.1</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
-### Upgrading to 0.3.0
-0.3.0 removes the APIs deprecated in 0.2.x, each with a one-line replacement. 0.2.0 replaced JSNI with JsInterop and removed jQuery from the core module. See [UPGRADING.md](UPGRADING.md) for the breaking changes of both and how to update your code.
-
-### ToDo
-* Extract datepicker and select engines to separate jar
+### Upgrading to 0.4.0
+0.4.0 removes the APIs deprecated in 0.3.1, moves the extras to jQuery 4, and gives each date picker and select engine its own GWT module: apps that inherit the engine's `...Resources` or `...URL` module don't change. See [UPGRADING.md](UPGRADING.md) for the breaking changes of each version and how to update your code.
 
 ### Final Release
+* 0.4.0 - Released on 8 October 2026.
+  * Based on Bootstrap v5.3.8. Choices.js and Slim Select as select engines, each date picker and select engine in its own module, jQuery 4 in the extras, the Bootstrap 5.3 options and classes that had no API.
 * 0.3.1 - Released on 7 October 2026.
   * Based on Bootstrap v5.3.8. `StickyHelper` for the sticky positions (`Affix` deprecated), `Bootbox.init` fixed, bundled JavaScript libraries updated.
 * 0.3.0 - Released on 7 October 2026.
@@ -30,7 +29,7 @@ Add GWTBootstrap5 to your project as a Maven dependency from Maven Central.
 ### Links
 * [Demo](https://gwtbootstrap5.github.io/) - Every widget of GwtBootstrap5 and its extras running, next to the UiBinder code that creates it.
 * [Getting started](https://gwtbootstrap5.github.io/#setup) - Dependencies, the GWT module to inherit and the host page.
-* [Upgrading](UPGRADING.md) - Breaking changes from 0.2.x and 0.1.x and how to update your code.
+* [Upgrading](UPGRADING.md) - The breaking changes of each version and how to update your code.
 * [API Docs](https://javadoc.io/doc/io.github.gwtbootstrap5/gwtbootstrap5) - The GwtBootstrap5 Javadoc.
 * [Extras API Docs](https://javadoc.io/doc/io.github.gwtbootstrap5/gwtbootstrap5-extras) - The GwtBootstrap5 Extras Javadoc.
 * [Maven Central](https://central.sonatype.com/namespace/io.github.gwtbootstrap5) - The published artifacts.
